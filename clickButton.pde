@@ -4,19 +4,30 @@ class clickButton {
   int r=0, g=0, b=0; // RGB code for box color
 
   void locate() {
-    noStroke();
-    if(mouseHere(x,y,w,h)) {
-      // when mouse is on the button
-      fill(0xFF-r, 0xFF-g, 0xFF-b);
-      cursor(HAND); // clickable
-    }
-    else {
-      fill(r, g, b);
-      cursor(ARROW); // back to ordinary state
-    }
+    fillAndStroke();
+    updateMouseState();
     rect(x, y, w, h); // drawing button
   }
-  
+
+  void fillAndStroke() {
+    // set Button design(stroke, fill), depends on the mouse location
+    noStroke();
+    if (mouseHere(x, y, w, h)) {
+      fill(0xFF-r, 0xFF-g, 0xFF-b);
+    } else {
+      fill(r, g, b);
+    }
+  }
+
+  void updateMouseState() {
+    // updates mouse shape
+    if (mouseHere(x, y, w, h)) {
+      cursor(HAND);
+    } else {
+      cursor(ARROW);
+    }
+  }
+
   void click() {
     // nothing - should override
   }

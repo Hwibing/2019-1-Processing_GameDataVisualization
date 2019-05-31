@@ -55,3 +55,17 @@ class clickButton {
     h=ts;
   }
 }
+
+class searchButton extends clickButton {
+  @Override
+  void click() {
+    
+  }
+  
+  searchButton(int tx, int ty, int ts) {
+    super(tx, ty, ts);
+  }
+  searchButton(int tx, int ty, int tw, int th) {
+    super(tx, ty, tw, th);
+  }
+}

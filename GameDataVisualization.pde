@@ -1,27 +1,26 @@
 import controlP5.*;
-
 ControlP5 cp5;
-ListBox criteria; 
+
+DropdownList criteria;
+String[] criterias={"Title", "Company", "Classification number"};
 Textfield searchText;
 
 XML searchData;
 PImage label;
-
+PFont font;
 void setup() {
-  size(1600, 900);
-  
+  size(1600, 900); // window size
   cp5=new ControlP5(this);
-  
-  cp5.addListBox("criteria").setPosition(650,50).setBarHeight(25).setItemHeight(25);
-  /*criteria.addItem("Title");
-  criteria.addItem("Studio");
-  criteria.addItem("Signification");*/
-  
-  cp5.addTextfield("searchText").setPosition(400,400).setSize(100,50).setAutoClear(false);
-  cp5.addBang("TextSubmit").setPosition(500,400).setSize(100,50);
+
+  // dropdown list
+  criteria=cp5.addDropdownList("Criteria").setPosition(650,60).setItemHeight(20).setBarHeight(15)
+  .setBackgroundColor(color(190)).setColorBackground(color(60)).setColorActive(color(255, 128));
+  //criteria.setFont(
+  for (String i:criterias) criteria.addItem(i, i);
+  criteria.close();
   
   label=loadImage("Label.png");
-  label.resize(625, 95);
+  label.resize(625, 92);
 }
 
 void draw() {
@@ -40,13 +39,13 @@ XML getDataFromAPI(String game_title, String ent_name, String rate_no, int page)
 }
 
 void decorating() {
-  stroke(0); fill(0);
+  stroke(0); 
+  fill(0);
   image(label, 10, 20);
-  line(20,125,1580,125);
+  line(20, 125, 1580, 125);
 }
 
 void textSubmit() {
-  
 }
 
 boolean mouseHere(int x, int y, int w, int h) {

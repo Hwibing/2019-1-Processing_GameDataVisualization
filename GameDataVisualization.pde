@@ -4,11 +4,12 @@ import static javax.swing.JOptionPane.ERROR_MESSAGE;
 ControlP5 cp5;
 
 DropdownList criteria;
-String[] criterias={"Title", "Company", "Class number"};
+String[] criterias={"Title", "Company", "Class. number"};
 Textfield searchText;
 
 XML searchData;
 PFont fontB, fontR, fontL;
+boolean isLoading=false;
 
 void setup() {
   size(1600, 900); // window size
@@ -16,7 +17,8 @@ void setup() {
   fontB=createFont("NanumSquareRoundB.ttf", 33);
   fontR=createFont("NanumSquareRoundR.ttf", 18);
   fontL=createFont("NanumSquareRoundL.ttf", 20);
-
+  PImage search_button_images[]={loadImage("button1.png"),loadImage("button2.png"),loadImage("button3.png")};
+  for(PImage i:search_button_images) i.resize(45,45);
 
   // dropdown list
   criteria=cp5.addDropdownList("Criteria", 0, 0, 148, 120).setPosition(650, 50).setItemHeight(30).setBarHeight(30)
@@ -32,7 +34,35 @@ void setup() {
 
   // bang (search button)
   cp5.addBang("textSubmit").setPosition(1520, 42).setSize(45, 45)
-    .setColorBackground(color(60)).setColorActive(color(128)).setColorForeground(0xff000000);
+    .setColorBackground(color(60)).setColorActive(color(128)).setColorForeground(0xff000000).setImages(search_button_images);
+}
+
+void textSubmit() {
+  // search corresponding games
+  delay(100);
+  if (criteria.getLabel()=="Criteria") {
+    // Did not choose the criteria
+    showMessageDialog(null, "Select the criteria.", "Alert", ERROR_MESSAGE);
+  } else if (searchText.getText().length()==0) {
+    // Did not input any text
+    showMessageDialog(null, "Type the keywords.", "Alert", ERROR_MESSAGE);
+  } else {
+    // normal case
+    String keywords=searchText.getText();
+    switch((int)criteria.getValue()) {
+    case 0:
+      searchData=getDataFromAPI(keywords, "", "", 1);
+      break;
+    case 1:
+      searchData=getDataFromAPI("", keywords, "", 1);
+      break;
+    case 2:
+      searchData=getDataFromAPI("", "", keywords, 1);
+      break;
+    }
+  }
+  delay(100);
+  searchText.setText("");
 }
 
 void draw() {
@@ -40,43 +70,16 @@ void draw() {
   decorating();
 }
 
-XML getDataFromAPI(String game_title, String ent_name, String rate_no, int page) {
-  // gets data from game API
-  XML xml=null;
-  String APIlink=
-    "http://www.grac.or.kr/WebService/GameSearchSvc.asmx/game?"
-    + "gametitle=" + game_title + "&entname=" + ent_name + "&rateno=" + rate_no + "&display=10&pageno=" + page;
-
-  xml=loadXML(APIlink);
-  return xml;
-}
-
 void decorating() {
   stroke(0); 
   fill(0);
   line(20, 125, 1580, 125);
+  
   textFont(fontB);
   textAlign(LEFT, TOP);
   text("Game Search Engine (3308 Hwibing) ", 30, 45);
 }
 
-void textSubmit() {
-  if (criteria.getLabel()=="Criteria") {
-    // Did not choose the criteria
-    delay(100);
-    showMessageDialog(null, "Select the criteria.", "Alert", ERROR_MESSAGE);
-    delay(100);
-  } else if (searchText.getText().length()==0) {
-    // Did not input any text
-    delay(100);
-    showMessageDialog(null, "Type the keywords.", "Alert", ERROR_MESSAGE);
-    delay(100);
-  } else {
-    // normal case
-  }
-}
-
-boolean mouseHere(int x, int y, int w, int h) {
-  // rectangle range
-  return x<=mouseX && y<=mouseY && mouseX<=x+w && mouseY<=y+h;
+void keyPressed() {
+  if (searchText.isActive() && keyCode==ENTER) textSubmit();
 }

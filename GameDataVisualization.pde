@@ -10,8 +10,9 @@ Textfield search_text; // typing area
 String keyword;
 
 XML search_result; // search result (from Game API)
-int total_num=-1, result_page=1; // result page
+int total_num=-1, page=0;
 ArrayList<game> games;
+gameRow[] list = new gameRow[10];
 
 PFont fontB, fontR, fontRbig, fontL; // fonts
 boolean isLoading=false; // for the "Loading" statement on the screen
@@ -46,10 +47,7 @@ void textSubmit() {
   }
 
   while (isLoading) {
-    print("Loading");
-  }
-  for (game i : games) {
-    println(i.toString());
+    print(".");
   }
   delay(100);
 }
@@ -68,14 +66,15 @@ void decorate() {
     switch(total_num) {
     case -2: // error of keywords
       text("Please check the keywords again.", width/2, height/2);
+      break;
     case -1: // no search data
-      text("Please enter the name of the game in the search box.", width/2, height/2);
+      text("Please enter the keywords in the search box.", width/2, height/2);
       break;
     case 0: // no such game
       text("No such game.", width/2, height/2);
       break;
     default:
-      showGames(games);
+      showGames();
     }
   }
 

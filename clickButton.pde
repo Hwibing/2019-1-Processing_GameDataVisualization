@@ -1,7 +1,7 @@
 class clickButton {
   int x, y; // location
   int w, h; // width and height of the box
-  int r=0, g=0, b=0; // RGB code for box color
+  int r=128, g=128, b=128; // RGB code for box color
 
   void locate() {
     fillAndStroke();

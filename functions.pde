@@ -20,15 +20,14 @@ void getDataFromAPI() {
   String APIlink="http://www.grac.or.kr/WebService/GameSearchSvc.asmx/game?"
     + "gametitle=" + game_title + "&entname=" + ent_name + "&rateno=" + rate_no + "&display=10&pageno=1";
   search_result=loadXML(APIlink);
-  
+
   // checking the errors of keyword
-  if(search_result.getChild("error")!=null) {
-    println(search_result.getChild("error"));
+  if (search_result.getName()=="error") {
     total_num=-2; // error of keyword
     isLoading=false;
     return;
   }
-  
+
   // getting all data
   total_num=search_result.getChild("tcount").getIntContent();
   if (total_num>0) {
@@ -58,14 +57,35 @@ void analyzeData() {
     }
   }
 
+  page=0;
   games=temp_games;
+  listUpdate();
 }
 
-void showGames(ArrayList<game> games) {
+void listUpdate() {
+  for (int i=0; i<page*10 && i<total_num; i+=1) {
+    if (page*10+i>=total_num) break;
+    list[i]=new gameRow(i*100, i*100, 100, 100, games.get(page*10+i));
+  }
+}
+
+void showGames() {
   textFont(fontL);
   textAlign(LEFT, TOP);
   fill(0);
-  text("There are total of "+total_num+" search results.", 100, 200);
+  text("There are total of "+total_num+" search results.", 60, 160);
+  text("(page "+page+1+"/"+((total_num+9)/10)+")", 60, 190);
+
+  for (gameRow i : list) {
+    println(page,"asdf");
+    try {
+      i.locate();
+      println("saf");
+    }
+    catch (NullPointerException e) {
+      break;
+    }
+  }
 }
 
 boolean mouseHere(int x, int y, int w, int h) {

@@ -1,6 +1,7 @@
 import controlP5.*;
+import java.util.ArrayList;
 import static javax.swing.JOptionPane.showMessageDialog;
-import static javax.swing.JOptionPane.ERROR_MESSAGE; 
+import static javax.swing.JOptionPane.ERROR_MESSAGE;
 ControlP5 cp5;
 
 DropdownList criteria; // search criteria
@@ -15,12 +16,47 @@ boolean isLoading=false; // for the "Loading" statement on the screen
 void setup() {
   size(1600, 900); // window size
   cp5=new ControlP5(this);
-  
+  designSet();
+}
+
+void draw() {
+  background(255);
+  decorate();
+}
+
+void textSubmit() {
+  // search corresponding games
+  delay(100); // to stop the infinite submit
+
+  if (criteria.getLabel()=="Criteria") {
+    // Did not choose the criteria
+    showMessageDialog(null, "Select the criteria.", "Alert", ERROR_MESSAGE);
+    return;
+  } else if (search_text.getText().length()<3) {
+    // Text is too short
+    showMessageDialog(null, "Type more than 2 letters.", "Alert", ERROR_MESSAGE);
+    return;
+  } else {
+    // normal case
+    isLoading=true;
+    thread("getDataFromAPI");
+  }
+
+  delay(100); // to stop the infinite submit
+  search_text.setText(""); // make textField empty
+
+  while (isLoading) {
+    println("Loading");
+  }
+  analyzeData();
+}
+
+void designSet() {
   // fonts
   fontB=createFont("NanumSquareRoundB.ttf", 35);
   fontR=createFont("NanumSquareRoundR.ttf", 18);
   fontL=createFont("NanumSquareRoundL.ttf", 20);
-  
+
   // search buttonimages
   PImage search_button_images[]={loadImage("button1.png"), loadImage("button2.png"), loadImage("button3.png")};
   for (PImage i : search_button_images) i.resize(45, 45);
@@ -47,32 +83,7 @@ void setup() {
     .setImages(search_button_images); // set images
 }
 
-void textSubmit() {
-  // search corresponding games
-  delay(100); // to stop the infinite submit
-  
-  if (criteria.getLabel()=="Criteria") {
-    // Did not choose the criteria
-    showMessageDialog(null, "Select the criteria.", "Alert", ERROR_MESSAGE);
-  } else if (search_text.getText().length()<=4) {
-    // Text is too short
-    showMessageDialog(null, "Type at least 4 letters.", "Alert", ERROR_MESSAGE);
-  }   else {
-    // normal case
-    isLoading=true;
-    thread("getDataFromAPI");
-  }
-  
-  delay(100); // to stop the infinite submit
-  search_text.setText(""); // make textField empty
-}
-
-void draw() {
-  background(255);
-  decorating();
-}
-
-void decorating() {
+void decorate() {
   stroke(0); 
   fill(0);
   line(20, 125, 1580, 125);

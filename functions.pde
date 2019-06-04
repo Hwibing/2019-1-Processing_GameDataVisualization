@@ -22,6 +22,25 @@ void getDataFromAPI() {
   isLoading=false;
 }
 
+ArrayList<game> analyzeData() {
+  int totalNum=search_result.getChild("tcount").getIntContent();
+  ArrayList<game> games=new ArrayList();
+
+  if (totalNum==0) {
+  } else {
+    XML[] items=search_result.getChildren("item");
+    for (XML i : items) {
+      String[] content = new String[7];
+      for (int j=0; j<7; j+=1) {
+        content[j]=i.getContent(elements[j]);
+      }
+      games.add(new game(content));
+    }
+  }
+
+  return games;
+}
+
 boolean mouseHere(int x, int y, int w, int h) {
   // rectangle range
   return x<=mouseX && y<=mouseY && mouseX<=x+w && mouseY<=y+h;

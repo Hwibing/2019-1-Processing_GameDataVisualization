@@ -1,8 +1,9 @@
+String[] elements={"gametitle", "orgname", "entname", "hoperate", "givenrate", "rateno", "rateddate"}; // length: 7
+
 class game {
-  String game_title, org_name, ent_name;
-  String rate_no;
-  String hope_rate, given_rate;
-  String rate_date;
-  
-  
+  String attributes[]=new String[7];
+
+  game(String[] input) {
+    attributes=input;
+  }
 }

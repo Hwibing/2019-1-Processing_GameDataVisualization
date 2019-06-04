@@ -56,16 +56,9 @@ class clickButton {
   }
 }
 
-class searchButton extends clickButton {
-  @Override
-  void click() {
-    
-  }
-  
-  searchButton(int tx, int ty, int ts) {
-    super(tx, ty, ts);
-  }
-  searchButton(int tx, int ty, int tw, int th) {
+class search_q extends clickButton {
+  search_q(int tx, int ty, int tw, int th) {
+    // rectangle
     super(tx, ty, tw, th);
   }
 }

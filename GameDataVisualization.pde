@@ -3,66 +3,68 @@ import static javax.swing.JOptionPane.showMessageDialog;
 import static javax.swing.JOptionPane.ERROR_MESSAGE; 
 ControlP5 cp5;
 
-DropdownList criteria;
-String[] criterias={"Title", "Company", "Class. number"};
-Textfield searchText;
+DropdownList criteria; // search criteria
+String[] criterias={"Title", "Entertainment", "Rate No."}; // criteria list
+Textfield search_text; // typing area
 
-XML searchData;
-PFont fontB, fontR, fontL;
-boolean isLoading=false;
+XML search_result; // search result (from Game API)
+int result_page=1; // result page
+PFont fontB, fontR, fontL; // fonts
+boolean isLoading=false; // for the "Loading" statement on the screen
 
 void setup() {
   size(1600, 900); // window size
   cp5=new ControlP5(this);
-  fontB=createFont("NanumSquareRoundB.ttf", 33);
+  
+  // fonts
+  fontB=createFont("NanumSquareRoundB.ttf", 35);
   fontR=createFont("NanumSquareRoundR.ttf", 18);
   fontL=createFont("NanumSquareRoundL.ttf", 20);
-  PImage search_button_images[]={loadImage("button1.png"),loadImage("button2.png"),loadImage("button3.png")};
-  for(PImage i:search_button_images) i.resize(45,45);
+  
+  // search buttonimages
+  PImage search_button_images[]={loadImage("button1.png"), loadImage("button2.png"), loadImage("button3.png")};
+  for (PImage i : search_button_images) i.resize(45, 45);
 
   // dropdown list
-  criteria=cp5.addDropdownList("Criteria", 0, 0, 148, 120).setPosition(650, 50).setItemHeight(30).setBarHeight(30)
-    .setBackgroundColor(color(190)).setColorBackground(color(60)).setColorActive(color(255, 128)).setFont(fontR);
-  criteria.getCaptionLabel().toUpperCase(false);
+  criteria=cp5.addDropdownList("Criteria", 0, 0, 148, 120) // initial position, width, max height(including items)
+    .setPosition(650, 50).setItemHeight(30).setBarHeight(30) // position and item/bar height
+    .setBackgroundColor(color(190)).setColorBackground(color(60)).setColorActive(color(255, 128)).setFont(fontR); // colors and fonts
+  criteria.getCaptionLabel().toUpperCase(false); // Inactivate auto-capitalizing
   criteria.getValueLabel().toUpperCase(false);
-  for (String i : criterias) criteria.addItem(i, i);
+  for (String i : criterias) criteria.addItem(i, i); // adding items to dropdown list
   criteria.close();
+  fontR=createFont("NanumSquareRoundR.ttf", 45);
 
   // textfield
-  searchText=cp5.addTextfield("searchText").setPosition(845, 42).setSize(640, 45)
-    .setColorBackground(color(60)).setColorActive(color(255, 128)).setColorForeground(0xff000000).setFont(fontL);
+  search_text=cp5.addTextfield("search_text")
+    .setPosition(845, 42).setSize(640, 45) // position and size
+    .setColorBackground(color(60)).setColorActive(color(255, 128)).setColorForeground(0xff000000).setFont(fontL); // colors and fonts
+  fontL=createFont("NanumSquareRoundL.ttf", 10);
 
   // bang (search button)
-  cp5.addBang("textSubmit").setPosition(1520, 42).setSize(45, 45)
-    .setColorBackground(color(60)).setColorActive(color(128)).setColorForeground(0xff000000).setImages(search_button_images);
+  cp5.addBang("textSubmit") // connecting to function 
+    .setPosition(1520, 42).setSize(45, 45) // position and size
+    .setImages(search_button_images); // set images
 }
 
 void textSubmit() {
   // search corresponding games
-  delay(100);
+  delay(100); // to stop the infinite submit
+  
   if (criteria.getLabel()=="Criteria") {
     // Did not choose the criteria
     showMessageDialog(null, "Select the criteria.", "Alert", ERROR_MESSAGE);
-  } else if (searchText.getText().length()==0) {
-    // Did not input any text
-    showMessageDialog(null, "Type the keywords.", "Alert", ERROR_MESSAGE);
-  } else {
+  } else if (search_text.getText().length()<=4) {
+    // Text is too short
+    showMessageDialog(null, "Type at least 4 letters.", "Alert", ERROR_MESSAGE);
+  }   else {
     // normal case
-    String keywords=searchText.getText();
-    switch((int)criteria.getValue()) {
-    case 0:
-      searchData=getDataFromAPI(keywords, "", "", 1);
-      break;
-    case 1:
-      searchData=getDataFromAPI("", keywords, "", 1);
-      break;
-    case 2:
-      searchData=getDataFromAPI("", "", keywords, 1);
-      break;
-    }
+    isLoading=true;
+    thread("getDataFromAPI");
   }
-  delay(100);
-  searchText.setText("");
+  
+  delay(100); // to stop the infinite submit
+  search_text.setText(""); // make textField empty
 }
 
 void draw() {
@@ -74,12 +76,24 @@ void decorating() {
   stroke(0); 
   fill(0);
   line(20, 125, 1580, 125);
-  
+  if (isLoading) { 
+    textFont(fontR);
+    textAlign(CENTER, CENTER);
+    text("Loading", width/2, height/2);
+  }
+
   textFont(fontB);
   textAlign(LEFT, TOP);
-  text("Game Search Engine (3308 Hwibing) ", 30, 45);
+  text("게임 검색기 (3308 박해준)", 130, 45);
+
+  try {
+    textFont(fontL);
+    text(search_result.toString(), 0, 0);
+  } 
+  catch (NullPointerException e) {
+  }
 }
 
 void keyPressed() {
-  if (searchText.isActive() && keyCode==ENTER) textSubmit();
+  if (search_text.isActive() && keyCode==ENTER) textSubmit();
 }

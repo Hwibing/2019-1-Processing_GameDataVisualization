@@ -7,16 +7,19 @@ ControlP5 cp5;
 DropdownList criteria; // search criteria
 String[] criterias={"Title", "Entertainment", "Rate No."}; // criteria list
 Textfield search_text; // typing area
+String keyword;
 
 XML search_result; // search result (from Game API)
-int result_page=1; // result page
-PFont fontB, fontR, fontL; // fonts
+int total_num=-1, result_page=1; // result page
+ArrayList<game> PGames;
+
+PFont fontB, fontR, fontRbig, fontL, fontLsmall; // fonts
 boolean isLoading=false; // for the "Loading" statement on the screen
 
 void setup() {
   size(1600, 900); // window size
   cp5=new ControlP5(this);
-  designSet();
+  cp5Set();
 }
 
 void draw() {
@@ -26,13 +29,12 @@ void draw() {
 
 void textSubmit() {
   // search corresponding games
-  delay(100); // to stop the infinite submit
 
   if (criteria.getLabel()=="Criteria") {
     // Did not choose the criteria
     showMessageDialog(null, "Select the criteria.", "Alert", ERROR_MESSAGE);
     return;
-  } else if (search_text.getText().length()<3) {
+  } else if (keyword.length()<3) {
     // Text is too short
     showMessageDialog(null, "Type more than 2 letters.", "Alert", ERROR_MESSAGE);
     return;
@@ -42,20 +44,50 @@ void textSubmit() {
     thread("getDataFromAPI");
   }
 
-  delay(100); // to stop the infinite submit
-  search_text.setText(""); // make textField empty
-
   while (isLoading) {
     println("Loading");
   }
-  analyzeData();
+  
+  for (game i : PGames) {
+    println(i.toString());
+  }
 }
 
-void designSet() {
+void decorate() {
+  stroke(0); 
+  fill(0);
+  line(20, 125, 1580, 125);
+
+  textFont(fontRbig);
+  textAlign(CENTER, CENTER);
+  if (isLoading) { 
+    text("Loading...", width/2, height/2);
+  } else {
+    switch(total_num) {
+    case -1:
+      text("Please enter the name of the game in the search box.", width/2, height/2);
+      break;
+    case 0:
+      text("No such game.", width/2, height/2);
+      break;
+    default:
+      textFont(fontLsmall);
+      showGames(PGames);
+    }
+  }
+
+  textFont(fontB);
+  textAlign(LEFT, TOP);
+  text("게임 검색기 (3308 박해준)", 130, 45);
+}
+
+void cp5Set() {
   // fonts
   fontB=createFont("NanumSquareRoundB.ttf", 35);
   fontR=createFont("NanumSquareRoundR.ttf", 18);
   fontL=createFont("NanumSquareRoundL.ttf", 20);
+  fontRbig=createFont("NanumSquareRoundR.ttf", 45);
+  fontLsmall=createFont("NanumSquareRoundL.ttf", 10);
 
   // search buttonimages
   PImage search_button_images[]={loadImage("button1.png"), loadImage("button2.png"), loadImage("button3.png")};
@@ -69,42 +101,29 @@ void designSet() {
   criteria.getValueLabel().toUpperCase(false);
   for (String i : criterias) criteria.addItem(i, i); // adding items to dropdown list
   criteria.close();
-  fontR=createFont("NanumSquareRoundR.ttf", 45);
 
   // textfield
   search_text=cp5.addTextfield("search_text")
     .setPosition(845, 42).setSize(640, 45) // position and size
     .setColorBackground(color(60)).setColorActive(color(255, 128)).setColorForeground(0xff000000).setFont(fontL); // colors and fonts
-  fontL=createFont("NanumSquareRoundL.ttf", 10);
 
   // bang (search button)
-  cp5.addBang("textSubmit") // connecting to function 
+  cp5.addBang("textSubmitbyClick") // connecting to function 
     .setPosition(1520, 42).setSize(45, 45) // position and size
     .setImages(search_button_images); // set images
 }
 
-void decorate() {
-  stroke(0); 
-  fill(0);
-  line(20, 125, 1580, 125);
-  if (isLoading) { 
-    textFont(fontR);
-    textAlign(CENTER, CENTER);
-    text("Loading", width/2, height/2);
-  }
-
-  textFont(fontB);
-  textAlign(LEFT, TOP);
-  text("게임 검색기 (3308 박해준)", 130, 45);
-
-  try {
-    textFont(fontL);
-    text(search_result.toString(), 0, 0);
-  } 
-  catch (NullPointerException e) {
-  }
+void textSubmitbyClick() {
+  if (isLoading) return;
+  keyword=search_text.getText();
+  search_text.setText(""); // make textfield empty
+  thread("textSubmit");
 }
 
 void keyPressed() {
-  if (search_text.isActive() && keyCode==ENTER) textSubmit();
+  if (isLoading) return;
+  if (search_text.isActive() && keyCode==ENTER) {
+    keyword=search_text.getText();
+    thread("textSubmit");
+  }
 }

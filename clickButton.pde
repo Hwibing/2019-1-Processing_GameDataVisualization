@@ -5,7 +5,6 @@ class clickButton {
 
   void locate() {
     fillAndStroke();
-    updateMouseState();
     rect(x, y, w, h); // drawing button
   }
 
@@ -16,15 +15,6 @@ class clickButton {
       fill(0xFF-r, 0xFF-g, 0xFF-b);
     } else {
       fill(r, g, b);
-    }
-  }
-
-  void updateMouseState() {
-    // updates mouse shape
-    if (mouseHere(x, y, w, h)) {
-      cursor(HAND);
-    } else {
-      cursor(ARROW);
     }
   }
 
@@ -41,24 +31,26 @@ class clickButton {
 
   clickButton(int tx, int ty, int tw, int th) {
     // rectangle
-    x=tx; 
-    y=ty; 
-    w=tw; 
+    x=tx;
+    y=ty;
+    w=tw;
     h=th;
   }
 
   clickButton(int tx, int ty, int ts) {
     // square
-    x=tx; 
-    y=ty; 
-    w=ts; 
+    x=tx;
+    y=ty;
+    w=ts;
     h=ts;
   }
 }
 
-class search_q extends clickButton {
-  search_q(int tx, int ty, int tw, int th) {
+class gameRow extends clickButton {
+  game game_info;
+  gameRow(int tx, int ty, int tw, int th, game G) {
     // rectangle
     super(tx, ty, tw, th);
+    game_info=G;
   }
 }

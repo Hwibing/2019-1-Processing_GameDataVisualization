@@ -65,7 +65,7 @@ void analyzeData() {
 void listUpdate() {
   for (int i=0; i<10; i+=1) {
     if (page*10+i>=total_num) break;
-    list[i]=new gameRow(60, i*80+210, 500, 50, games.get(page*10+i));
+    list[i]=new gameRow(60, i*60+250, 800, 55, games.get(page*10+i));
     list[i].setColor(192);
   }
 }
@@ -90,4 +90,8 @@ void showGames() {
 boolean mouseHere(int x, int y, int w, int h) {
   // rectangle range
   return x<=mouseX && y<=mouseY && mouseX<=x+w && mouseY<=y+h;
+}
+
+boolean mouseHere(clickButton cb) {
+  return mouseHere(cb.x, cb.y, cb.w, cb.h);
 }

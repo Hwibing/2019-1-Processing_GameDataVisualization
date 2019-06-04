@@ -123,9 +123,21 @@ void textSubmitbyClick() {
 }
 
 void keyPressed() {
-  if (isLoading) return;
+  if (isLoading) return; // ignore while loading
   if (search_text.isActive() && keyCode==ENTER) {
+    // submit by pressing enter key
     keyword=search_text.getText();
     thread("textSubmit");
+  }
+}
+
+void mouseClicked() {
+  for (gameRow i : list) {
+    if(i==null) return;
+    if (mouseHere(i)) {
+      // list element clicked
+      i.click();
+      return;
+    }
   }
 }

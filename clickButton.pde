@@ -11,7 +11,7 @@ class clickButton {
   void fillAndStroke() {
     // set Button design(stroke, fill), depends on the mouse location
     noStroke();
-    if (mouseHere(x, y, w, h)) {
+    if (mouseHere(this)) {
       fill(0xFF-gray_color);
     } else {
       fill(gray_color);
@@ -41,22 +41,5 @@ class clickButton {
     y=ty;
     w=ts;
     h=ts;
-  }
-}
-
-class gameRow extends clickButton {
-  game game_info;
-  gameRow(int tx, int ty, int tw, int th, game G) {
-    // rectangle
-    super(tx, ty, tw, th);
-    game_info=G;
-  }
-
-  @Override
-  void fillAndStroke() {
-    noStroke();
-    if (mouseHere(x, y, w, h)) {
-      fill(gray_color/2);
-    }
   }
 }

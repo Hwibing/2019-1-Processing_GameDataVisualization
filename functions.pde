@@ -63,9 +63,10 @@ void analyzeData() {
 }
 
 void listUpdate() {
-  for (int i=0; i<page*10 && i<total_num; i+=1) {
+  for (int i=0; i<10; i+=1) {
     if (page*10+i>=total_num) break;
-    list[i]=new gameRow(i*100, i*100, 100, 100, games.get(page*10+i));
+    list[i]=new gameRow(60, i*80+210, 500, 50, games.get(page*10+i));
+    list[i].setColor(192);
   }
 }
 
@@ -74,13 +75,11 @@ void showGames() {
   textAlign(LEFT, TOP);
   fill(0);
   text("There are total of "+total_num+" search results.", 60, 160);
-  text("(page "+page+1+"/"+((total_num+9)/10)+")", 60, 190);
+  text("(page "+(page+1)+"/"+((total_num+9)/10)+")", 60, 190);
 
   for (gameRow i : list) {
-    println(page,"asdf");
     try {
       i.locate();
-      println("saf");
     }
     catch (NullPointerException e) {
       break;

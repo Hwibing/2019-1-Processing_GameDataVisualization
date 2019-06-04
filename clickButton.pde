@@ -1,7 +1,7 @@
 class clickButton {
   int x, y; // location
   int w, h; // width and height of the box
-  int r=128, g=128, b=128; // RGB code for box color
+  int gray_color=128; // gray color value for box color
 
   void locate() {
     fillAndStroke();
@@ -12,9 +12,9 @@ class clickButton {
     // set Button design(stroke, fill), depends on the mouse location
     noStroke();
     if (mouseHere(x, y, w, h)) {
-      fill(0xFF-r, 0xFF-g, 0xFF-b);
+      fill(0xFF-gray_color);
     } else {
-      fill(r, g, b);
+      fill(gray_color);
     }
   }
 
@@ -22,11 +22,9 @@ class clickButton {
     // nothing - should override
   }
 
-  void setColor(int tr, int tg, int tb) {
+  void setColor(int tg) {
     // setting the color of button
-    r=tr;
-    g=tg;
-    b=tb;
+    gray_color=tg;
   }
 
   clickButton(int tx, int ty, int tw, int th) {
@@ -52,5 +50,13 @@ class gameRow extends clickButton {
     // rectangle
     super(tx, ty, tw, th);
     game_info=G;
+  }
+
+  @Override
+  void fillAndStroke() {
+    noStroke();
+    if (mouseHere(x, y, w, h)) {
+      fill(gray_color/2);
+    }
   }
 }

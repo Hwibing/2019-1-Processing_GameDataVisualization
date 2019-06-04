@@ -47,7 +47,7 @@ void textSubmit() {
   }
 
   while (isLoading) {
-    print(".");
+    print("");
   }
   delay(100);
 }
@@ -78,6 +78,7 @@ void decorate() {
     }
   }
 
+  fill(0);
   textFont(fontB);
   textAlign(LEFT, TOP);
   text("게임 검색기 (3308 박해준)", 130, 45);

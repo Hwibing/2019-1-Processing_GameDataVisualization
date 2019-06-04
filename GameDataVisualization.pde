@@ -11,9 +11,9 @@ String keyword;
 
 XML search_result; // search result (from Game API)
 int total_num=-1, result_page=1; // result page
-ArrayList<game> PGames;
+ArrayList<game> games;
 
-PFont fontB, fontR, fontRbig, fontL, fontLsmall; // fonts
+PFont fontB, fontR, fontRbig, fontL; // fonts
 boolean isLoading=false; // for the "Loading" statement on the screen
 
 void setup() {
@@ -28,8 +28,9 @@ void draw() {
 }
 
 void textSubmit() {
+  total_num=-1; // not searched yet
   // search corresponding games
-
+  delay(100); // to prevent the infinite-clicking
   if (criteria.getLabel()=="Criteria") {
     // Did not choose the criteria
     showMessageDialog(null, "Select the criteria.", "Alert", ERROR_MESSAGE);
@@ -45,12 +46,12 @@ void textSubmit() {
   }
 
   while (isLoading) {
-    println("Loading");
+    print("Loading");
   }
-  
-  for (game i : PGames) {
+  for (game i : games) {
     println(i.toString());
   }
+  delay(100);
 }
 
 void decorate() {
@@ -61,18 +62,20 @@ void decorate() {
   textFont(fontRbig);
   textAlign(CENTER, CENTER);
   if (isLoading) { 
-    text("Loading...", width/2, height/2);
+    if (total_num>0) text("Loading...\n"+"(total "+total_num+" results)", width/2, height/2);
+    else text("Loading...\n", width/2, height/2);
   } else {
     switch(total_num) {
-    case -1:
+    case -2: // error of keywords
+      text("Please check the keywords again.", width/2, height/2);
+    case -1: // no search data
       text("Please enter the name of the game in the search box.", width/2, height/2);
       break;
-    case 0:
+    case 0: // no such game
       text("No such game.", width/2, height/2);
       break;
     default:
-      textFont(fontLsmall);
-      showGames(PGames);
+      showGames(games);
     }
   }
 
@@ -85,9 +88,8 @@ void cp5Set() {
   // fonts
   fontB=createFont("NanumSquareRoundB.ttf", 35);
   fontR=createFont("NanumSquareRoundR.ttf", 18);
-  fontL=createFont("NanumSquareRoundL.ttf", 20);
+  fontL=createFont("NanumSquareRoundL.ttf", 24);
   fontRbig=createFont("NanumSquareRoundR.ttf", 45);
-  fontLsmall=createFont("NanumSquareRoundL.ttf", 10);
 
   // search buttonimages
   PImage search_button_images[]={loadImage("button1.png"), loadImage("button2.png"), loadImage("button3.png")};

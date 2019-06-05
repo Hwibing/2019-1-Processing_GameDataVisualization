@@ -61,29 +61,27 @@ class pageButton extends clickButton {
   pageButton(int tx, int ty, int ts) {
     // square
     super(tx, ty, ts);
+    this.setColor(64);
   }
 
   @Override
-  void fillAndStroke() {
-    // set Button design(stroke, fill), depends on the mouse location
+    void fillAndStroke() {
     if (mouseHere(this)) {
       stroke(0);
-      fill(#AB149B);
+      fill(#0088FF);
     } else {
       noStroke();
-      fill(#124411);
+      fill(gray_color);
     }
   }
 
   @Override
-  void click() {
-    println(page, page_num);
+    void click() {
     if (page+page_num<0 || page+page_num>max_page) {
       return;
     }
     page+=page_num;
     listUpdate();
-    println(page, page_num);
   }
 
   void setPageNum(int move_page) {

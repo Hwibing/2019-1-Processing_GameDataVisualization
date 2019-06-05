@@ -21,8 +21,8 @@ void setup() {
   cp5Set();
 
   // new page buttons
-  prev_btn=new pageButton(1000, 300, 50);
-  post_btn=new pageButton(1000, 400, 50);
+  prev_btn=new pageButton(795, 160, 30);
+  post_btn=new pageButton(830, 160, 30);
   prev_btn.setPageNum(-1);
   post_btn.setPageNum(1);
 }
@@ -148,24 +148,19 @@ void keyPressed() {
 }
 
 void mouseClicked() {
-  println("I am here0");
   if (isLoading) return;
   for (gameRow i : list) {
     if (i==null) break;
     if (mouseHere(i)) {
       // list element clicked
       i.click();
-      println("I am here0.5");
       return;
     }
   }
-  println("I am here");
   if (mouseHere(prev_btn)) {
-    print("prev button clicked ");
     prev_btn.click();
   }
   if (mouseHere(post_btn)) {
-    print("post button clicked ");
     post_btn.click();
   }
 }

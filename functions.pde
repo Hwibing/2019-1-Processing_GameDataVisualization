@@ -52,7 +52,7 @@ void analyzeData() {
     for (XML i : items) { // for each items(games)
       String[] content = new String[7];
       for (int j=0; j<7; j+=1) {
-        content[j]=i.getChild(elements[j]).getContent("NIL"); // get attributes
+        content[j]=i.getChild(elements[j]).getContent("NIL").trim(); // get attributes
       }
       temp_games.add(new game(content)); // makes new game object and add into ArrayList
     }
@@ -86,6 +86,11 @@ void showGames() {
   // page buttons
   prev_btn.locate();
   post_btn.locate();
+  fill(255);
+  textFont(fontR);
+  textAlign(CENTER, CENTER);
+  text("←",810,175);
+  text("→",845,175);
 
   // gamerows
   for (gameRow i : list) {

@@ -61,14 +61,25 @@ void decorate() {
   fill(0);
   line(20, 125, 1580, 125);
 
-  // center text (state message)
   textFont(fontRbig);
   textAlign(CENTER, CENTER);
-  if (isLoading) { 
-    if (total_num>0) text("Loading...\n"+"(total "+total_num+" results)", width/2, height/2);
-    else text("Loading...\n", width/2, height/2);
+  if (isLoading) {
+    // center text (state message)
+    if (total_num>0) {
+      if (total_num<=150) {
+        // small data set
+        text("Loading...\n"+"(total "+total_num+" results)", width/2, height/2);
+      }
+      else {
+        // big data set
+        text("Loading...\n"+"(total "+(loading_cnt*15>total_num ? loading_cnt*15:total_num)+"/"+total_num+" results)", width/2, height/2);
+      }
+    } else text("Loading...\n", width/2, height/2);
   } else {
+    // loading complete - result page
     switch(total_num) {
+      case -3: // error of server
+      text("Server is having some trouble. Try it later.", width/2, height/2);
     case -2: // error of keywords
       text("Please check the keywords again.", width/2, height/2);
       break;
@@ -79,7 +90,7 @@ void decorate() {
       text("No such game.", width/2, height/2);
       break;
     default:
-      showGames();
+      showGames(); // game lists
     }
   }
 
@@ -90,6 +101,7 @@ void decorate() {
     text(last_game.toString(), width, height);
   }
   catch(NullPointerException e) {
+    // None
   }
 
   // title

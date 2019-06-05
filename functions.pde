@@ -1,3 +1,9 @@
+import java.net.*;
+import java.io.*;
+
+InputStream input = null;
+int loading_cnt;
+
 void getDataFromAPI() {
   // gets data from game API 
   String game_title, ent_name, rate_no;
@@ -20,23 +26,54 @@ void getDataFromAPI() {
   String APIlink="http://www.grac.or.kr/WebService/GameSearchSvc.asmx/game?"
     + "gametitle=" + game_title + "&entname=" + ent_name + "&rateno=" + rate_no + "&display=10&pageno=1";
   // TODO: cutting a lot of datas
-  search_result=loadXML(APIlink);
-
-  // checking the errors of keyword
-  if (search_result.getName()=="error") {
-    total_num=-2; // error of keyword
-    isLoading=false;
+  if (isThisLinkOK(APIlink)) search_result=loadXML(APIlink);
+  else {
+    stopThread(-3);
     return;
   }
 
-  // getting all data
-  total_num=search_result.getChild("tcount").getIntContent();
-  if (total_num>0) {
-    APIlink="http://www.grac.or.kr/WebService/GameSearchSvc.asmx/game?"
-      + "gametitle=" + game_title + "&entname=" + ent_name + "&rateno=" + rate_no + "&display="+total_num+"&pageno=1";
-    search_result=loadXML(APIlink);
+  // checking the errors of keyword
+  if (search_result.getName()=="error") {
+    stopThread(-2);
+    return;
   }
 
+  total_num=search_result.getChild("tcount").getIntContent(); // get total results number
+  // getting all data
+  if (total_num>0) {
+    if (total_num<=150) { // small amount
+      APIlink="http://www.grac.or.kr/WebService/GameSearchSvc.asmx/game?"
+        + "gametitle=" + game_title + "&entname=" + ent_name + "&rateno=" + rate_no + "&display="+total_num+"&pageno=1";
+      if (isThisLinkOK(APIlink)) search_result=loadXML(APIlink); // get all at once
+      else {
+        stopThread(-3);
+        return;
+      }
+    } else {
+      // too large data set
+      // get many times, small amount per each time
+      loading_cnt=0; // 
+      search_result=null;
+      XML resXML=new XML("result"); // result xml; be going to be search_result
+      XML tempXML; // temp result for getting the data of each page
+      while (loading_cnt*15<total_num) {
+        loading_cnt+=1;
+        APIlink="http://www.grac.or.kr/WebService/GameSearchSvc.asmx/game?"
+          + "gametitle=" + game_title + "&entname=" + ent_name + "&rateno=" + rate_no + "&display=15&pageno="+loading_cnt;
+        if (!isThisLinkOK(APIlink)) {
+          stopThread(-3);
+          return;
+        }
+        tempXML=loadXML(APIlink); // get data from API
+        // copying all items to resXML
+        XML items[]=tempXML.getChildren("item");
+        for (XML i : items) {
+          resXML.addChild(i);
+        }
+      }
+      search_result=resXML;
+    }
+  }
   analyzeData(); // make structure to handle easily
   isLoading=false; // done data loading
 }
@@ -44,7 +81,6 @@ void getDataFromAPI() {
 void analyzeData() {
   // analyze the XML file about games
   ArrayList<game> temp_games=new ArrayList();
-  total_num=search_result.getChild("tcount").getIntContent();
 
   if (total_num==0) {
   } else {
@@ -58,6 +94,7 @@ void analyzeData() {
     }
   }
 
+  // resetting some variables
   page=0;
   max_page=total_num/10;
   games=temp_games;
@@ -89,8 +126,8 @@ void showGames() {
   fill(255);
   textFont(fontR);
   textAlign(CENTER, CENTER);
-  text("←",810,175);
-  text("→",845,175);
+  text("←", 810, 175);
+  text("→", 845, 175);
 
   // gamerows
   for (gameRow i : list) {
@@ -100,6 +137,23 @@ void showGames() {
     catch (NullPointerException e) {
       break;
     }
+  }
+}
+
+void stopThread(int error_num) {
+  total_num=error_num;
+  isLoading=false;
+}
+
+boolean isThisLinkOK(String test_url) {
+  try {
+    URL url = new URL(test_url);
+    URLConnection connection = url.openConnection();
+    input = connection.getInputStream();
+    return true;
+  } 
+  catch (Exception e) {
+    return false;
   }
 }
 

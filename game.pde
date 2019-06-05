@@ -10,9 +10,14 @@ class game {
   String toString() {
     String res="";
     for (int i=0; i<7; i+=1) {
-      res+=elements[i]+": "+attributes[i]+"\n";
+      res+=elements[i]+": "+attributes[i];
+      if(i<7-1) res+="\n";
     }
     return res;
+  }
+
+  String getAttribute(int k) {
+    return attributes[k];
   }
 }
 
@@ -25,7 +30,7 @@ class gameRow extends clickButton {
   }
 
   @Override
-  void fillAndStroke() {
+    void fillAndStroke() {
     // set Button design(stroke, fill), depends on the mouse location
     if (mouseHere(this)) {
       stroke(0);
@@ -37,7 +42,16 @@ class gameRow extends clickButton {
   }
 
   @Override
-  void click() {
-    println(game_info);
+    void locate() {
+    super.locate();
+    textFont(fontR);
+    textAlign(CENTER, CENTER);
+    fill(0);
+    text(game_info.getAttribute(0), x, y, w, h);
+  }
+
+  @Override
+    void click() {
+    last_game=game_info;
   }
 }

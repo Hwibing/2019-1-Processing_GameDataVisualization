@@ -13,6 +13,7 @@ XML search_result; // search result (from Game API)
 int total_num=-1, page=0;
 ArrayList<game> games;
 gameRow[] list = new gameRow[10];
+game last_game;
 
 PFont fontB, fontR, fontRbig, fontL; // fonts
 boolean isLoading=false; // for the "Loading" statement on the screen
@@ -30,6 +31,9 @@ void draw() {
 
 void textSubmit() {
   total_num=-1; // not searched yet
+  last_game=null; // reset
+  search_text.setText(keyword); // recovery
+  
   // search corresponding games
   delay(100); // to prevent the infinite-clicking
   if (criteria.getLabel()=="Criteria") {
@@ -53,10 +57,12 @@ void textSubmit() {
 }
 
 void decorate() {
+  // segregation
   stroke(0); 
   fill(0);
   line(20, 125, 1580, 125);
 
+  // center text (state message)
   textFont(fontRbig);
   textAlign(CENTER, CENTER);
   if (isLoading) { 
@@ -78,16 +84,26 @@ void decorate() {
     }
   }
 
+  // last clicked game info
+  try {
+    fill(0);
+    textAlign(RIGHT, BOTTOM);
+    text(last_game.toString(), width, height);
+  }
+  catch(NullPointerException e) {
+  }
+
+  // title
   fill(0);
   textFont(fontB);
   textAlign(LEFT, TOP);
-  text("게임 검색기 (3308 박해준)", 130, 45);
+  text("게임 검색기 (3308 박해준)", 125, 45);
 }
 
 void cp5Set() {
   // fonts
   fontB=createFont("NanumSquareRoundB.ttf", 35);
-  fontR=createFont("NanumSquareRoundR.ttf", 18);
+  fontR=createFont("NanumSquareRoundR.ttf", 20);
   fontL=createFont("NanumSquareRoundL.ttf", 24);
   fontRbig=createFont("NanumSquareRoundR.ttf", 45);
 
@@ -96,8 +112,8 @@ void cp5Set() {
   for (PImage i : search_button_images) i.resize(45, 45);
 
   // dropdown list
-  criteria=cp5.addDropdownList("Criteria", 0, 0, 148, 120) // initial position, width, max height(including items)
-    .setPosition(650, 50).setItemHeight(30).setBarHeight(30) // position and item/bar height
+  criteria=cp5.addDropdownList("Criteria", 0, 0, 160, 160) // initial position, width, max height(including items)
+    .setPosition(640, 45).setItemHeight(40).setBarHeight(40) // position and item/bar height
     .setBackgroundColor(color(190)).setColorBackground(color(60)).setColorActive(color(255, 128)).setFont(fontR); // colors and fonts
   criteria.getCaptionLabel().toUpperCase(false); // Inactivate auto-capitalizing
   criteria.getValueLabel().toUpperCase(false);
@@ -127,13 +143,14 @@ void keyPressed() {
   if (search_text.isActive() && keyCode==ENTER) {
     // submit by pressing enter key
     keyword=search_text.getText();
+    search_text.setText("");
     thread("textSubmit");
   }
 }
 
 void mouseClicked() {
   for (gameRow i : list) {
-    if(i==null) return;
+    if (i==null) return;
     if (mouseHere(i)) {
       // list element clicked
       i.click();

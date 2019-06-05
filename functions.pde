@@ -19,6 +19,7 @@ void getDataFromAPI() {
   // connects to the API, which is XML file format
   String APIlink="http://www.grac.or.kr/WebService/GameSearchSvc.asmx/game?"
     + "gametitle=" + game_title + "&entname=" + ent_name + "&rateno=" + rate_no + "&display=10&pageno=1";
+  // TODO: cutting a lot of datas
   search_result=loadXML(APIlink);
 
   // checking the errors of keyword
@@ -63,6 +64,7 @@ void analyzeData() {
 }
 
 void listUpdate() {
+  list=new gameRow[10];
   for (int i=0; i<10; i+=1) {
     if (page*10+i>=total_num) break;
     list[i]=new gameRow(60, i*60+250, 800, 55, games.get(page*10+i));

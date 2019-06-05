@@ -26,6 +26,14 @@ class clickButton {
     // setting the color of button
     gray_color=tg;
   }
+  
+  int getCenterX() {
+    return (x+x+w)/2;
+  }
+  
+  int getCenterY() {
+    return (y+y+h)/2;
+  }
 
   clickButton(int tx, int ty, int tw, int th) {
     // rectangle

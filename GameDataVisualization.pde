@@ -47,11 +47,7 @@ void textSubmit() {
   } else {
     // normal case
     isLoading=true;
-    thread("getDataFromAPI");
-  }
-
-  while (isLoading) {
-    print("");
+    getDataFromAPI();
   }
   delay(100);
 }

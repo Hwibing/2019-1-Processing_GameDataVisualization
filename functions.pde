@@ -59,11 +59,13 @@ void analyzeData() {
   }
 
   page=0;
+  max_page=total_num/10;
   games=temp_games;
   listUpdate();
 }
 
 void listUpdate() {
+  // updates list, called when results are newly searched or page is changed
   list=new gameRow[10];
   for (int i=0; i<10; i+=1) {
     if (page*10+i>=total_num) break;
@@ -73,12 +75,19 @@ void listUpdate() {
 }
 
 void showGames() {
+  // show games and related layouts.
+  // primary information
   textFont(fontL);
   textAlign(LEFT, TOP);
   fill(0);
   text("There are total of "+total_num+" search results.", 60, 160);
-  text("(page "+(page+1)+"/"+((total_num+9)/10)+")", 60, 190);
+  text("(page "+(page+1)+"/"+(max_page+1)+")", 60, 190);
 
+  // page buttons
+  prev_btn.locate();
+  post_btn.locate();
+
+  // gamerows
   for (gameRow i : list) {
     try {
       i.locate();

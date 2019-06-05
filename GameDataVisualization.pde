@@ -10,10 +10,7 @@ Textfield search_text; // typing area
 String keyword;
 
 XML search_result; // search result (from Game API)
-int total_num=-1, page=0;
-ArrayList<game> games;
-gameRow[] list = new gameRow[10];
-game last_game;
+int total_num=-1, page=0, max_page; // caution: page denoted and real value of page is different (+-1)
 
 PFont fontB, fontR, fontRbig, fontL; // fonts
 boolean isLoading=false; // for the "Loading" statement on the screen
@@ -22,6 +19,12 @@ void setup() {
   size(1600, 900); // window size
   cp5=new ControlP5(this);
   cp5Set();
+
+  // new page buttons
+  prev_btn=new pageButton(1000, 300, 50);
+  post_btn=new pageButton(1000, 400, 50);
+  prev_btn.setPageNum(-1);
+  post_btn.setPageNum(1);
 }
 
 void draw() {
@@ -33,7 +36,7 @@ void textSubmit() {
   total_num=-1; // not searched yet
   last_game=null; // reset
   search_text.setText(keyword); // recovery
-  
+
   // search corresponding games
   delay(100); // to prevent the infinite-clicking
   if (criteria.getLabel()=="Criteria") {
@@ -53,7 +56,7 @@ void textSubmit() {
 }
 
 void decorate() {
-  // segregation
+  // segregation line
   stroke(0); 
   fill(0);
   line(20, 125, 1580, 125);
@@ -145,12 +148,24 @@ void keyPressed() {
 }
 
 void mouseClicked() {
+  println("I am here0");
+  if (isLoading) return;
   for (gameRow i : list) {
-    if (i==null) return;
+    if (i==null) break;
     if (mouseHere(i)) {
       // list element clicked
       i.click();
+      println("I am here0.5");
       return;
     }
+  }
+  println("I am here");
+  if (mouseHere(prev_btn)) {
+    print("prev button clicked ");
+    prev_btn.click();
+  }
+  if (mouseHere(post_btn)) {
+    print("post button clicked ");
+    post_btn.click();
   }
 }

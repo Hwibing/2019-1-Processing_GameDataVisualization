@@ -72,7 +72,7 @@ void decorate() {
       }
       else {
         // big data set
-        text("Loading...\n"+"(total "+(loading_cnt*15>total_num ? loading_cnt*15:total_num)+"/"+total_num+" results)", width/2, height/2);
+        text("Loading...\n"+"(total "+(loading_cnt*150<total_num ? loading_cnt*150:total_num)+"/"+total_num+" results)", width/2, height/2);
       }
     } else text("Loading...\n", width/2, height/2);
   } else {
@@ -80,6 +80,7 @@ void decorate() {
     switch(total_num) {
       case -3: // error of server
       text("Server is having some trouble. Try it later.", width/2, height/2);
+      break;
     case -2: // error of keywords
       text("Please check the keywords again.", width/2, height/2);
       break;

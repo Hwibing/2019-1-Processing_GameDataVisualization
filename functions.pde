@@ -26,12 +26,13 @@ void getDataFromAPI() {
   String APIlink="http://www.grac.or.kr/WebService/GameSearchSvc.asmx/game?"
     + "gametitle=" + game_title + "&entname=" + ent_name + "&rateno=" + rate_no + "&display=10&pageno=1";
   // TODO: cutting a lot of datas
-  if (isThisLinkOK(APIlink)) search_result=loadXML(APIlink);
-  else {
+  if (!isThisLinkOK(APIlink)) {
     stopThread(-3);
     return;
   }
 
+  // get all data
+  search_result=loadXML(APIlink);
   // checking the errors of keyword
   if (search_result.getName()=="error") {
     stopThread(-2);
@@ -41,31 +42,33 @@ void getDataFromAPI() {
   total_num=search_result.getChild("tcount").getIntContent(); // get total results number
   // getting all data
   if (total_num>0) {
-    if (total_num<=150) { // small amount
+    if (total_num<=150) {
+      // small data set
       APIlink="http://www.grac.or.kr/WebService/GameSearchSvc.asmx/game?"
         + "gametitle=" + game_title + "&entname=" + ent_name + "&rateno=" + rate_no + "&display="+total_num+"&pageno=1";
-      if (isThisLinkOK(APIlink)) search_result=loadXML(APIlink); // get all at once
-      else {
+      if (isThisLinkOK(APIlink)) {
         stopThread(-3);
         return;
       }
-    } else {
-      // too large data set
-      // get many times, small amount per each time
-      loading_cnt=0; // 
-      search_result=null;
+      search_result=loadXML(APIlink); // get all at once
+    }
+    else {
+      // too large data set, so divide the whole data set
+      loading_cnt=0; 
       XML resXML=new XML("result"); // result xml; be going to be search_result
       XML tempXML; // temp result for getting the data of each page
-      while (loading_cnt*15<total_num) {
+      
+      while (loading_cnt*150<total_num) {
         loading_cnt+=1;
         APIlink="http://www.grac.or.kr/WebService/GameSearchSvc.asmx/game?"
-          + "gametitle=" + game_title + "&entname=" + ent_name + "&rateno=" + rate_no + "&display=15&pageno="+loading_cnt;
+          + "gametitle=" + game_title + "&entname=" + ent_name + "&rateno=" + rate_no + "&display=150&pageno="+loading_cnt;
         if (!isThisLinkOK(APIlink)) {
           stopThread(-3);
           return;
         }
-        tempXML=loadXML(APIlink); // get data from API
-        // copying all items to resXML
+        
+        // get and move 
+        tempXML=loadXML(APIlink);
         XML items[]=tempXML.getChildren("item");
         for (XML i : items) {
           resXML.addChild(i);

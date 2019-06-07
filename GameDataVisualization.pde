@@ -9,9 +9,6 @@ String[] criterias={"Title", "Entertainment", "Rate No."}; // criteria list
 Textfield search_text; // typing area
 String keyword;
 
-XML search_result; // search result (from Game API)
-int total_num=-1, page=0, max_page; // caution: page denoted and real value of page is different (+-1)
-
 PFont fontB, fontR, fontRbig, fontL; // fonts
 boolean isLoading=false; // for the "Loading" statement on the screen
 
@@ -171,9 +168,11 @@ void mouseClicked() {
     }
   }
   if (mouseHere(prev_btn)) {
+    // previous page
     prev_btn.click();
   }
   if (mouseHere(post_btn)) {
+    // posterior page
     post_btn.click();
   }
 }

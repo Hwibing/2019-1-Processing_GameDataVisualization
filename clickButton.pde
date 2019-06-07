@@ -56,6 +56,7 @@ class clickButton {
 }
 
 class pageButton extends clickButton {
+  // button which changes result page
   int page_num=0;
 
   pageButton(int tx, int ty, int ts) {
@@ -90,6 +91,7 @@ class pageButton extends clickButton {
 }
 
 class gameRow extends clickButton {
+  // shows search list
   game game_info;
   gameRow(int tx, int ty, int tw, int th, game G) {
     // rectangle
@@ -122,5 +124,48 @@ class gameRow extends clickButton {
   @Override
     void click() {
     last_game=game_info;
+  }
+}
+
+class sortButton extends clickButton {
+  // changes the way of sorting 
+  int sort_way;
+  String label; 
+  
+  sortButton(int tx, int ty, int tw, int th) {
+    super(tx, ty, tw, th);
+  }
+
+  void setSort(int n) {
+    sort_way=n;
+  }
+  
+  void setText(String str) {
+    label=str;
+  }
+
+  @Override
+    void fillAndStroke() {
+    if (mouseHere(this)) {
+      stroke(0);
+      fill(#0088FF);
+    } else {
+      noStroke();
+      fill(gray_color);
+    }
+  }
+  
+  @Override
+    void locate() {
+    super.locate();
+    textFont(fontL);
+    textAlign(CENTER, CENTER);
+    fill(0);
+    text(label, x, y, w, h);
+  }
+  
+  @Override
+  void click() {
+    
   }
 }

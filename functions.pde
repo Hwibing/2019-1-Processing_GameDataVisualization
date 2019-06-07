@@ -4,6 +4,9 @@ import java.io.*;
 InputStream input = null;
 int loading_cnt;
 
+XML search_result; // search result (from Game API)
+int total_num=-1, page=0, max_page; // caution: page denoted and real value of page is different (+-1)
+
 void getDataFromAPI() {
   // gets data from game API 
   String game_title, ent_name, rate_no;
@@ -25,7 +28,6 @@ void getDataFromAPI() {
   // connects to the API, which is XML file format
   String APIlink="http://www.grac.or.kr/WebService/GameSearchSvc.asmx/game?"
     + "gametitle=" + game_title + "&entname=" + ent_name + "&rateno=" + rate_no + "&display=10&pageno=1";
-  // TODO: cutting a lot of datas
   if (!isThisLinkOK(APIlink)) {
     stopThread(-3);
     return;
@@ -46,18 +48,17 @@ void getDataFromAPI() {
       // small data set
       APIlink="http://www.grac.or.kr/WebService/GameSearchSvc.asmx/game?"
         + "gametitle=" + game_title + "&entname=" + ent_name + "&rateno=" + rate_no + "&display="+total_num+"&pageno=1";
-      if (isThisLinkOK(APIlink)) {
+      if (!isThisLinkOK(APIlink)) {
         stopThread(-3);
         return;
       }
       search_result=loadXML(APIlink); // get all at once
-    }
-    else {
+    } else {
       // too large data set, so divide the whole data set
       loading_cnt=0; 
       XML resXML=new XML("result"); // result xml; be going to be search_result
       XML tempXML; // temp result for getting the data of each page
-      
+
       while (loading_cnt*150<total_num) {
         loading_cnt+=1;
         APIlink="http://www.grac.or.kr/WebService/GameSearchSvc.asmx/game?"
@@ -66,7 +67,7 @@ void getDataFromAPI() {
           stopThread(-3);
           return;
         }
-        
+
         // get and move 
         tempXML=loadXML(APIlink);
         XML items[]=tempXML.getChildren("item");

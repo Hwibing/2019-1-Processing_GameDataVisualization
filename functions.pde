@@ -125,13 +125,17 @@ void showGames() {
   text("(page "+(page+1)+"/"+(max_page+1)+")", 60, 190);
 
   // page buttons
+  first_btn.locate();
   prev_btn.locate();
   post_btn.locate();
+  last_btn.locate();
   fill(255);
   textFont(fontR);
   textAlign(CENTER, CENTER);
-  text("←", 810, 175);
-  text("→", 845, 175);
+  text("◀", 740, 175); 
+  text("←", 775, 175);
+  text("→", 810, 175);
+  text("▶", 845, 175);
 
   // gamerows
   for (gameRow i : list) {

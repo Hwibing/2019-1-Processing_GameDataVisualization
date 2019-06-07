@@ -1,4 +1,4 @@
-pageButton prev_btn, post_btn; // page changing numbers
+pageButton first_btn, prev_btn, post_btn, last_btn; // page changing numbers
 gameRow[] list = new gameRow[10]; // gamerow array
 
 class clickButton {
@@ -58,6 +58,7 @@ class clickButton {
 class pageButton extends clickButton {
   // button which changes result page
   int page_num=0;
+  boolean extreme=false; // if this is true, go to terminal page 
 
   pageButton(int tx, int ty, int ts) {
     // square
@@ -78,15 +79,28 @@ class pageButton extends clickButton {
 
   @Override
     void click() {
-    if (page+page_num<0 || page+page_num>max_page) {
-      return;
+    if (extreme) {
+      if (page_num<0) {
+        page=0;
+      } else if (page_num>0) {
+        page=max_page-1;
+      }
+      listUpdate();
+    } else {
+      if (page+page_num<0 || page+page_num>max_page) {
+        return;
+      }
+      page+=page_num;
+      listUpdate();
     }
-    page+=page_num;
-    listUpdate();
   }
 
   void setPageNum(int move_page) {
     page_num=move_page;
+  }
+
+  void setExtreme(boolean foo) {
+    extreme=foo;
   }
 }
 
@@ -131,7 +145,7 @@ class sortButton extends clickButton {
   // changes the way of sorting 
   int sort_way;
   String label; 
-  
+
   sortButton(int tx, int ty, int tw, int th) {
     super(tx, ty, tw, th);
   }
@@ -139,7 +153,7 @@ class sortButton extends clickButton {
   void setSort(int n) {
     sort_way=n;
   }
-  
+
   void setText(String str) {
     label=str;
   }
@@ -154,7 +168,7 @@ class sortButton extends clickButton {
       fill(gray_color);
     }
   }
-  
+
   @Override
     void locate() {
     super.locate();
@@ -163,9 +177,8 @@ class sortButton extends clickButton {
     fill(0);
     text(label, x, y, w, h);
   }
-  
+
   @Override
-  void click() {
-    
+    void click() {
   }
 }

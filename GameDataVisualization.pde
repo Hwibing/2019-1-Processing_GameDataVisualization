@@ -18,10 +18,16 @@ void setup() {
   cp5Set();
 
   // new page buttons
-  prev_btn=new pageButton(795, 160, 30);
-  post_btn=new pageButton(830, 160, 30);
+  first_btn=new pageButton(725, 160, 30);
+  prev_btn=new pageButton(760, 160, 30);
+  post_btn=new pageButton(795, 160, 30);
+  last_btn=new pageButton(830, 160, 30);
+  first_btn.setExtreme(true);
+  first_btn.setPageNum(-1);
   prev_btn.setPageNum(-1);
   post_btn.setPageNum(1);
+  last_btn.setExtreme(true);
+  last_btn.setPageNum(1);
 }
 
 void draw() {

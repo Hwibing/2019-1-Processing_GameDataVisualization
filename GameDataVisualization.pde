@@ -23,7 +23,7 @@ void setup() {
   last_btn=(pageButton)new pageButton(830, 160, 30).setExtreme(true).setPageNum(1).setText("▶");
 
   // sort buttons
-  name_sort=(sortButton)new sortButton(1200, 195, 100, 30).setSort(elements[0]).setText("게임명순");
+  name_sort=(sortButton)new sortButton(655, 195, 100, 30).setSort(elements[0]).setText("게임명순");
   date_sort=(sortButton)new sortButton(760, 195, 100, 30).setSort(elements[6]).setText("날짜순");
 }
 
@@ -36,6 +36,7 @@ void textSubmit() {
   total_num=-1; // not searched yet
   last_game=null; // reset
   search_text.setText(keyword); // recovery
+  name_sort.setText("게임명순");
   date_sort.setText("날짜순 ▼");
 
   // search corresponding games

@@ -99,13 +99,13 @@ void analyzeData() {
   }
 
   // resetting some variables
-  page=0;
   max_page=total_num/10;
   games=temp_games;
   listUpdate();
 }
 
 void listUpdate() {
+  page=0; // page initialize
   // updates list, called when results are newly searched or page is changed
   list=new gameRow[10];
   for (int i=0; i<10; i+=1) {

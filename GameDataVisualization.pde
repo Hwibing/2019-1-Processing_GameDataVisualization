@@ -1,3 +1,4 @@
+// TODO: dealing with max page error (example: "stone", title)
 import controlP5.*;
 import java.util.ArrayList;
 import static javax.swing.JOptionPane.showMessageDialog;
@@ -72,8 +73,7 @@ void decorate() {
       if (total_num<=150) {
         // small data set
         text("Loading...\n"+"(total "+total_num+" results)", width/2, height/2);
-      }
-      else {
+      } else {
         // big data set
         text("Loading...\n"+"(total "+(loading_cnt*150<total_num ? loading_cnt*150:total_num)+"/"+total_num+" results)", width/2, height/2);
       }
@@ -81,7 +81,7 @@ void decorate() {
   } else {
     // loading complete - result page
     switch(total_num) {
-      case -3: // error of server
+    case -3: // error of server
       text("Server is having some trouble. Try it later.", width/2, height/2);
       break;
     case -2: // error of keywords
@@ -173,12 +173,19 @@ void mouseClicked() {
       return;
     }
   }
-  if (mouseHere(prev_btn)) {
-    // previous page
-    prev_btn.click();
-  }
-  if (mouseHere(post_btn)) {
-    // posterior page
-    post_btn.click();
+  if (total_num>0) { // only works if search result exists
+    if (mouseHere(first_btn)) {
+      // first page
+      first_btn.click();
+    } else if (mouseHere(prev_btn)) {
+      // previous page
+      prev_btn.click();
+    } else if (mouseHere(post_btn)) {
+      // posterior page
+      post_btn.click();
+    } else if (mouseHere(last_btn)) {
+      // last page
+      last_btn.click();
+    }
   }
 }

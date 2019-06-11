@@ -12,11 +12,12 @@ class clickButton {
   }
 
   void fillAndStroke() {
-    // set Button design(stroke, fill), depends on the mouse location
-    noStroke();
+    // set color and stroke
     if (mouseHere(this)) {
-      fill(0xFF-gray_color);
+      stroke(0);
+      fill(#0088FF);
     } else {
+      noStroke();
       fill(gray_color);
     }
   }
@@ -83,7 +84,7 @@ class pageButton extends clickButton {
       if (page_num<0) {
         page=0;
       } else if (page_num>0) {
-        page=max_page-1;
+        page=max_page;
       }
       listUpdate();
     } else {
@@ -156,17 +157,6 @@ class sortButton extends clickButton {
 
   void setText(String str) {
     label=str;
-  }
-
-  @Override
-    void fillAndStroke() {
-    if (mouseHere(this)) {
-      stroke(0);
-      fill(#0088FF);
-    } else {
-      noStroke();
-      fill(gray_color);
-    }
   }
 
   @Override

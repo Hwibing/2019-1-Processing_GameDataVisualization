@@ -57,6 +57,12 @@ void decorate() {
   fill(0);
   line(20, 125, 1580, 125);
 
+  // title
+  fill(0);
+  textFont(fontB);
+  textAlign(LEFT, TOP);
+  text("게임 검색기 (3308 박해준)", 125, 45);
+
   textFont(fontRbig);
   textAlign(CENTER, CENTER);
   if (isLoading) {
@@ -89,22 +95,6 @@ void decorate() {
       showGames(); // game lists
     }
   }
-
-  // last clicked game info
-  try {
-    fill(0);
-    textAlign(RIGHT, BOTTOM);
-    text(last_game.toString(), width, height);
-  }
-  catch(NullPointerException e) {
-    // None
-  }
-
-  // title
-  fill(0);
-  textFont(fontB);
-  textAlign(LEFT, TOP);
-  text("게임 검색기 (3308 박해준)", 125, 45);
 }
 
 void cp5Set() {

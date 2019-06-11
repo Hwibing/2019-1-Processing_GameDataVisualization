@@ -140,6 +140,18 @@ void showGames() {
       break;
     }
   }
+
+  // last clicked game info
+  try {
+    fill(64);
+    rect(920, 670, 620, 175);
+    fill(255);
+    textAlign(LEFT, TOP);
+    text(last_game.toString(), 920, 670, 620, 175);
+  }
+  catch(NullPointerException e) {
+    // None
+  }
 }
 
 void stopThread(int error_num) {

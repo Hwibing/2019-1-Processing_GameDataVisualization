@@ -3,8 +3,8 @@ import java.util.Collections;
 ArrayList<game> games;
 game last_game;
 String[] elements={"gametitle", "orgname", "entname", "hoperate", "givenrate", "rateno", "rateddate"}; // length: 7
-int yardstick=0; // index above
-boolean isDescending=true;
+int yardstick=0; // index above, sort criteria
+boolean isDescending=true; // descending sort
 
 class game implements Comparable<game> {
   // game class
@@ -31,7 +31,7 @@ class game implements Comparable<game> {
   @Override
     public int compareTo(game G) {
     int res=this.attributes[yardstick].compareTo(G.attributes[yardstick]);
-    if(isDescending) return -res;
+    if (isDescending) return -res;
     else return res;
   }
 }

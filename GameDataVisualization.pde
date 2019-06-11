@@ -1,4 +1,3 @@
-// TODO: dealing with max page error (example: "stone", title)
 import controlP5.*;
 import java.util.ArrayList;
 import static javax.swing.JOptionPane.showMessageDialog;

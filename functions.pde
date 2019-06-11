@@ -84,28 +84,27 @@ void getDataFromAPI() {
 
 void analyzeData() {
   // analyze the XML file about games
+  // it is guaranteed that total_num>0
   ArrayList<game> temp_games=new ArrayList();
 
-  if (total_num==0) {
-  } else {
-    XML[] items=search_result.getChildren("item");
-    for (XML i : items) { // for each items(games)
-      String[] content = new String[7];
-      for (int j=0; j<7; j+=1) {
-        content[j]=i.getChild(elements[j]).getContent("NIL").trim(); // get attributes
-      }
-      temp_games.add(new game(content)); // makes new game object and add into ArrayList
+
+  XML[] items=search_result.getChildren("item");
+  for (XML i : items) { // for each items(games)
+    String[] content = new String[7];
+    for (int j=0; j<7; j+=1) {
+      content[j]=i.getChild(elements[j]).getContent("NIL").trim(); // get attributes
     }
+    temp_games.add(new game(content)); // makes new game object and add into ArrayList
   }
 
   // resetting some variables
-  max_page=total_num/10;
+  page=0; // page initialize
+  max_page=(total_num-1)/10;
   games=temp_games;
   listUpdate();
 }
 
 void listUpdate() {
-  page=0; // page initialize
   // updates list, called when results are newly searched or page is changed
   list=new gameRow[10];
   for (int i=0; i<10; i+=1) {

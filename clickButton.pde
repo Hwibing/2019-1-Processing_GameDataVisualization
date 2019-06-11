@@ -1,14 +1,20 @@
 pageButton first_btn, prev_btn, post_btn, last_btn; // page changing numbers
 gameRow[] list = new gameRow[10]; // gamerow array
 
-class clickButton {
+abstract class clickButton {
   int x, y; // location
   int w, h; // width and height of the box
   int gray_color=128; // gray color value for box color
+  int text_color=0; // text color
+  String label="";
 
   void locate() {
     fillAndStroke();
     rect(x, y, w, h); // drawing button
+    textFont(fontR);
+    textAlign(CENTER, CENTER);
+    fill(text_color);
+    text(label, x, y, w, h);
   }
 
   void fillAndStroke() {
@@ -26,9 +32,17 @@ class clickButton {
     // nothing - should override
   }
 
-  void setColor(int tg) {
+  void setColor(int foo) {
     // setting the color of button
-    gray_color=tg;
+    gray_color=foo;
+  }
+
+  void setTextColor(int bar) {
+    text_color=bar;
+  }
+
+  void setText(String str) {
+    label=str;
   }
 
   int getCenterX() {
@@ -128,15 +142,6 @@ class gameRow extends clickButton {
   }
 
   @Override
-    void locate() {
-    super.locate();
-    textFont(fontR);
-    textAlign(CENTER, CENTER);
-    fill(0);
-    text(game_info.getAttribute(0), x, y, w, h);
-  }
-
-  @Override
     void click() {
     last_game=game_info;
   }
@@ -145,7 +150,6 @@ class gameRow extends clickButton {
 class sortButton extends clickButton {
   // changes the way of sorting 
   int sort_way;
-  String label; 
 
   sortButton(int tx, int ty, int tw, int th) {
     super(tx, ty, tw, th);
@@ -153,19 +157,6 @@ class sortButton extends clickButton {
 
   void setSort(int n) {
     sort_way=n;
-  }
-
-  void setText(String str) {
-    label=str;
-  }
-
-  @Override
-    void locate() {
-    super.locate();
-    textFont(fontL);
-    textAlign(CENTER, CENTER);
-    fill(0);
-    text(label, x, y, w, h);
   }
 
   @Override

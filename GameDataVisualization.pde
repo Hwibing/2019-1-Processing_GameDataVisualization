@@ -1,5 +1,4 @@
 import controlP5.*;
-import java.util.ArrayList;
 import static javax.swing.JOptionPane.showMessageDialog;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 ControlP5 cp5;
@@ -22,12 +21,28 @@ void setup() {
   prev_btn=new pageButton(760, 160, 30);
   post_btn=new pageButton(795, 160, 30);
   last_btn=new pageButton(830, 160, 30);
+
+  // to the first page
   first_btn.setExtreme(true);
   first_btn.setPageNum(-1);
+  first_btn.setText("◀");
+  first_btn.setTextColor(255);
+
+  // to the previous page
   prev_btn.setPageNum(-1);
+  prev_btn.setText("←");
+  prev_btn.setTextColor(255);
+
+  // to the posterior page
   post_btn.setPageNum(1);
+  post_btn.setText("→");
+  post_btn.setTextColor(255);
+
+  // to the last page
   last_btn.setExtreme(true);
   last_btn.setPageNum(1);
+  last_btn.setText("▶");
+  last_btn.setTextColor(255);
 }
 
 void draw() {

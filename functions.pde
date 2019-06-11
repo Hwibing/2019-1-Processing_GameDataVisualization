@@ -109,8 +109,10 @@ void listUpdate() {
   list=new gameRow[10];
   for (int i=0; i<10; i+=1) {
     if (page*10+i>=total_num) break;
-    list[i]=new gameRow(60, i*60+250, 800, 55, games.get(page*10+i));
+    game G=games.get(page*10+i);
+    list[i]=new gameRow(60, i*60+250, 800, 55, G);
     list[i].setColor(192);
+    list[i].setText(G.getAttribute(0));
   }
 }
 
@@ -128,13 +130,6 @@ void showGames() {
   prev_btn.locate();
   post_btn.locate();
   last_btn.locate();
-  fill(255);
-  textFont(fontR);
-  textAlign(CENTER, CENTER);
-  text("◀", 740, 175); 
-  text("←", 775, 175);
-  text("→", 810, 175);
-  text("▶", 845, 175);
 
   // gamerows
   for (gameRow i : list) {

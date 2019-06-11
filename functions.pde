@@ -5,7 +5,7 @@ InputStream input = null;
 int loading_cnt;
 
 XML search_result; // search result (from Game API)
-int total_num=-1, page=0, max_page; // caution: page denoted and real value of page is different (+-1)
+int total_num=-1, page=0, max_page; // caution: page denoted and real value of page is different (delta -1)
 
 void getDataFromAPI() {
   // gets data from game API 
@@ -87,7 +87,6 @@ void analyzeData() {
   // it is guaranteed that total_num>0
   ArrayList<game> temp_games=new ArrayList();
 
-
   XML[] items=search_result.getChildren("item");
   for (XML i : items) { // for each items(games)
     String[] content = new String[7];
@@ -116,6 +115,13 @@ void listUpdate() {
   }
 }
 
+void sortAgain() {
+  // resetting some variables
+  page=0; // page initialize
+  Collections.sort(games);
+  listUpdate();
+}
+
 void showGames() {
   // show games and related layouts.
   // primary information
@@ -131,6 +137,10 @@ void showGames() {
   post_btn.locate();
   last_btn.locate();
 
+  // page buttons
+  name_sort.locate();
+  date_sort.locate();
+
   // gamerows
   for (gameRow i : list) {
     try {
@@ -144,6 +154,7 @@ void showGames() {
   // last clicked game info
   try {
     fill(64);
+    noStroke();
     rect(920, 670, 620, 175);
     fill(255);
     textAlign(LEFT, TOP);

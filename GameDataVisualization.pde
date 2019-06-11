@@ -4,7 +4,7 @@ import static javax.swing.JOptionPane.ERROR_MESSAGE;
 ControlP5 cp5;
 
 DropdownList criteria; // search criteria
-String[] criterias={"Title", "Entertainment", "Rate No."}; // criteria list
+String[] criterias={"게임명", "배급사명", "분류번호"}; // criteria list
 Textfield search_text; // typing area
 String keyword;
 
@@ -17,10 +17,14 @@ void setup() {
   cp5Set();
 
   // new page buttons
-  first_btn=(pageButton)new pageButton(725, 160, 30).setExtreme(true).setPageNum(-1).setText("◀").setTextColor(255);
-  prev_btn=(pageButton)new pageButton(760, 160, 30).setPageNum(-1).setText("←").setTextColor(255);
-  post_btn=(pageButton)new pageButton(795, 160, 30).setPageNum(1).setText("→").setTextColor(255);
-  last_btn=(pageButton)new pageButton(830, 160, 30).setExtreme(true).setPageNum(1).setText("▶").setTextColor(255);
+  first_btn=(pageButton)new pageButton(725, 160, 30).setExtreme(true).setPageNum(-1).setText("◀");
+  prev_btn=(pageButton)new pageButton(760, 160, 30).setPageNum(-1).setText("←");
+  post_btn=(pageButton)new pageButton(795, 160, 30).setPageNum(1).setText("→");
+  last_btn=(pageButton)new pageButton(830, 160, 30).setExtreme(true).setPageNum(1).setText("▶");
+
+  // sort buttons
+  name_sort=(sortButton)new sortButton(1200, 195, 100, 30).setSort(elements[0]).setText("게임명순");
+  date_sort=(sortButton)new sortButton(760, 195, 100, 30).setSort(elements[6]).setText("날짜순");
 }
 
 void draw() {
@@ -32,6 +36,7 @@ void textSubmit() {
   total_num=-1; // not searched yet
   last_game=null; // reset
   search_text.setText(keyword); // recovery
+  date_sort.setText("날짜순 ▼");
 
   // search corresponding games
   delay(100); // to prevent the infinite-clicking
@@ -63,10 +68,11 @@ void decorate() {
   textAlign(LEFT, TOP);
   text("게임 검색기 (3308 박해준)", 125, 45);
 
+  // state messages
   textFont(fontRbig);
   textAlign(CENTER, CENTER);
   if (isLoading) {
-    // center text (state message)
+    // loading page
     if (total_num>0) {
       if (total_num<=150) {
         // small data set
@@ -150,7 +156,7 @@ void mouseClicked() {
   for (gameRow i : list) {
     if (i==null) break;
     if (mouseHere(i)) {
-      // list element clicked
+      // gameRow list element clicked
       i.click();
       return;
     }
@@ -168,6 +174,16 @@ void mouseClicked() {
     } else if (mouseHere(last_btn)) {
       // last page
       last_btn.click();
+    } else if (mouseHere(name_sort)) {
+      // button text reset and sort by name
+      name_sort.setText("게임명순");
+      date_sort.setText("날짜순");
+      name_sort.click();
+    } else if (mouseHere(date_sort)) {
+      // button text reset and sort by date
+      name_sort.setText("게임명순");
+      date_sort.setText("날짜순");
+      date_sort.click();
     }
   }
 }

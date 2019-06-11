@@ -1,4 +1,5 @@
 pageButton first_btn, prev_btn, post_btn, last_btn; // page changing numbers
+sortButton name_sort, date_sort; // two kinds of sort button
 gameRow[] list = new gameRow[10]; // gamerow array
 
 abstract class clickButton {
@@ -6,7 +7,7 @@ abstract class clickButton {
   int w, h; // width and height of the box
   int gray_color=128; // gray color value for box color
   int text_color=0; // text color
-  String label="";
+  String label=""; // button text
 
   void locate() {
     fillAndStroke(); // fill and stroke
@@ -34,7 +35,6 @@ abstract class clickButton {
   }
 
   clickButton setColor(int foo) {
-    // setting the color of button
     gray_color=foo;
     return this;
   }
@@ -67,20 +67,20 @@ abstract class clickButton {
 }
 
 class pageButton extends clickButton {
-  // button which changes result page
+  // changes the page of result
   int page_num=0;
-  boolean extreme=false; // if this is true, go to terminal page 
+  boolean extreme=false; // enabling extreme operation
 
   pageButton(int tx, int ty, int ts) {
-    // square
     super(tx, ty, ts);
     this.setColor(64);
+    this.setTextColor(255);
   }
 
   @Override
     void click() {
     if (extreme) {
-      // extreme butoon - to the first or last page
+      // extreme button - to the first or last page
       if (page_num<0) {
         page=0;
       } else if (page_num>0) {
@@ -109,7 +109,7 @@ class pageButton extends clickButton {
 }
 
 class gameRow extends clickButton {
-  // shows search list
+  // each row of result
   game game_info;
   gameRow(int tx, int ty, int tw, int th, game G) {
     // rectangle
@@ -137,19 +137,36 @@ class gameRow extends clickButton {
 }
 
 class sortButton extends clickButton {
-  // changes the way of sorting 
-  int sort_way;
+  // changes the way of sorting
+  String sorting_way="";
 
   sortButton(int tx, int ty, int tw, int th) {
     super(tx, ty, tw, th);
+    this.setColor(64);
+    this.setTextColor(255);
   }
 
-  sortButton setSort(int n) {
-    sort_way=n;
+  sortButton setSort(String bar) {
+    sorting_way=bar;
     return this;
   }
 
   @Override
     void click() {
+    if (sortMode.equals(sorting_way)) {
+      // sorting direction toggle
+      isDescending=!isDescending;
+      if (isDescending) {
+        this.setText(this.label+" ▼");
+      } else {
+        this.setText(this.label+" ▲");
+      }
+    } else {
+      // new yardstick
+      sortMode=sorting_way;
+      isDescending=true;
+      this.setText(this.label+" ▼");
+    }
+    sortAgain();
   }
 }

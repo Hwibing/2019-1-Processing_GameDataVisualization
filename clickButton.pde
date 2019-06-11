@@ -9,17 +9,18 @@ abstract class clickButton {
   String label="";
 
   void locate() {
-    fillAndStroke();
+    fillAndStroke(); // fill and stroke
     rect(x, y, w, h); // drawing button
-    textFont(fontR);
-    textAlign(CENTER, CENTER);
-    fill(text_color);
-    text(label, x, y, w, h);
+    textFont(fontR); // text font set
+    textAlign(CENTER, CENTER); // text aligning
+    fill(text_color); // text color set
+    text(label, x, y, w, h); // show text(label)
   }
 
   void fillAndStroke() {
-    // set color and stroke
+    // set button color and stroke (not text)
     if (mouseHere(this)) {
+      // mouse is over the button
       stroke(0);
       fill(#0088FF);
     } else {
@@ -32,25 +33,20 @@ abstract class clickButton {
     // nothing - should override
   }
 
-  void setColor(int foo) {
+  clickButton setColor(int foo) {
     // setting the color of button
     gray_color=foo;
+    return this;
   }
 
-  void setTextColor(int bar) {
+  clickButton setTextColor(int bar) {
     text_color=bar;
+    return this;
   }
 
-  void setText(String str) {
+  clickButton setText(String str) {
     label=str;
-  }
-
-  int getCenterX() {
-    return (x+x+w)/2;
-  }
-
-  int getCenterY() {
-    return (y+y+h)/2;
+    return this;
   }
 
   clickButton(int tx, int ty, int tw, int th) {
@@ -82,19 +78,9 @@ class pageButton extends clickButton {
   }
 
   @Override
-    void fillAndStroke() {
-    if (mouseHere(this)) {
-      stroke(0);
-      fill(#0088FF);
-    } else {
-      noStroke();
-      fill(gray_color);
-    }
-  }
-
-  @Override
     void click() {
     if (extreme) {
+      // extreme butoon - to the first or last page
       if (page_num<0) {
         page=0;
       } else if (page_num>0) {
@@ -102,20 +88,23 @@ class pageButton extends clickButton {
       }
       listUpdate();
     } else {
+      // normal button - page +1 or -1
       if (page+page_num<0 || page+page_num>max_page) {
         return;
       }
       page+=page_num;
-      listUpdate();
+      listUpdate(); // update list
     }
   }
 
-  void setPageNum(int move_page) {
+  pageButton setPageNum(int move_page) {
     page_num=move_page;
+    return this;
   }
 
-  void setExtreme(boolean foo) {
+  pageButton setExtreme(boolean foo) {
     extreme=foo;
+    return this;
   }
 }
 
@@ -155,8 +144,9 @@ class sortButton extends clickButton {
     super(tx, ty, tw, th);
   }
 
-  void setSort(int n) {
+  sortButton setSort(int n) {
     sort_way=n;
+    return this;
   }
 
   @Override

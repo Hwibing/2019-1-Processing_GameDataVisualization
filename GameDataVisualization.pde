@@ -17,32 +17,10 @@ void setup() {
   cp5Set();
 
   // new page buttons
-  first_btn=new pageButton(725, 160, 30);
-  prev_btn=new pageButton(760, 160, 30);
-  post_btn=new pageButton(795, 160, 30);
-  last_btn=new pageButton(830, 160, 30);
-
-  // to the first page
-  first_btn.setExtreme(true);
-  first_btn.setPageNum(-1);
-  first_btn.setText("◀");
-  first_btn.setTextColor(255);
-
-  // to the previous page
-  prev_btn.setPageNum(-1);
-  prev_btn.setText("←");
-  prev_btn.setTextColor(255);
-
-  // to the posterior page
-  post_btn.setPageNum(1);
-  post_btn.setText("→");
-  post_btn.setTextColor(255);
-
-  // to the last page
-  last_btn.setExtreme(true);
-  last_btn.setPageNum(1);
-  last_btn.setText("▶");
-  last_btn.setTextColor(255);
+  first_btn=(pageButton)new pageButton(725, 160, 30).setExtreme(true).setPageNum(-1).setText("◀").setTextColor(255);
+  prev_btn=(pageButton)new pageButton(760, 160, 30).setPageNum(-1).setText("←").setTextColor(255);
+  post_btn=(pageButton)new pageButton(795, 160, 30).setPageNum(1).setText("→").setTextColor(255);
+  last_btn=(pageButton)new pageButton(830, 160, 30).setExtreme(true).setPageNum(1).setText("▶").setTextColor(255);
 }
 
 void draw() {

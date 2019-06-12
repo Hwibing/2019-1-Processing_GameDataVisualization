@@ -170,3 +170,7 @@ class sortButton extends clickButton {
     sortAgain();
   }
 }
+
+boolean mouseHere(clickButton cb) {
+  return mouseHere(cb.x, cb.y, cb.w, cb.h);
+}

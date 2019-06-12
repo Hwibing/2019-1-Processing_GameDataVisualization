@@ -45,7 +45,6 @@ void getStatistic() {
   if (years.containsKey("")) {
     years.put("N/A", years.remove(""));
   }
-  println(years);
 
   // sorting
   Iterator temp;
@@ -63,14 +62,11 @@ void getStatistic() {
   }
 }
 
-void showStatistic() {
-}
-
 Iterator sortHashMapByValue(final HashMap map) {
   ArrayList<String> list = new ArrayList();
   list.addAll(map.keySet());
   Collections.sort(list, new Comparator() {
-    int compare(Object o1, Object o2) {
+    public int compare(Object o1, Object o2) {
       Object v1 = map.get(o1);
       Object v2 = map.get(o2);
       return ((Comparable) v1).compareTo(v2);

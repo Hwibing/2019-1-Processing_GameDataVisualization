@@ -126,52 +126,6 @@ void sortAgain() {
   listUpdate();
 }
 
-void showGames() {
-  // show games and related layouts.
-  // primary information
-  textFont(fontL);
-  textAlign(LEFT, TOP);
-  fill(0);
-  text("There are "+total_num+" search results for \""+keyword+"\".", 60, 160);
-  text("(page "+(page+1)+"/"+(max_page+1)+")", 60, 190);
-
-  // page buttons
-  first_btn.locate();
-  prev_btn.locate();
-  post_btn.locate();
-  last_btn.locate();
-
-  // page buttons
-  name_sort.locate();
-  date_sort.locate();
-
-  // gamerows
-  for (gameRow i : list) {
-    try {
-      i.locate();
-    }
-    catch (NullPointerException e) {
-      break;
-    }
-  }
-
-  // last clicked game info
-  try {
-    fill(64);
-    noStroke();
-    rect(920, 670, 620, 175);
-    fill(255);
-    textAlign(LEFT, TOP);
-    text(last_game.toString(), 920, 670, 620, 175);
-  }
-  catch(NullPointerException e) {
-    // None
-  }
-
-  // statistics
-  showStatistic();
-}
-
 void stopThread(int error_num) {
   total_num=error_num;
   isLoading=false;
@@ -187,13 +141,4 @@ boolean isThisLinkOK(String test_url) {
   catch (Exception e) {
     return false;
   }
-}
-
-boolean mouseHere(int x, int y, int w, int h) {
-  // rectangle range
-  return x<=mouseX && y<=mouseY && mouseX<=x+w && mouseY<=y+h;
-}
-
-boolean mouseHere(clickButton cb) {
-  return mouseHere(cb.x, cb.y, cb.w, cb.h);
 }

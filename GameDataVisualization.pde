@@ -6,7 +6,7 @@ ControlP5 cp5;
 DropdownList criteria; // search criteria
 String[] criterias={"게임명", "배급사명", "분류번호"}; // criteria list
 Textfield search_text; // typing area
-String keyword;
+String keyword="";
 
 PFont fontB, fontR, fontRbig, fontL; // fonts
 boolean isLoading=false, isAnalyzing=false; // for the state sentence on the screen
@@ -35,7 +35,6 @@ void draw() {
 void textSubmit() {
   total_num=0; // not searched yet
   last_game=null; // reset
-  search_text.setText(keyword); // recovery
   name_sort.setText("게임명순");
   date_sort.setText("날짜순 ▼");
 
@@ -144,7 +143,7 @@ void cp5Set() {
 void textSubmitbyClick() {
   if (isLoading) return;
   keyword=search_text.getText();
-  search_text.setText(""); // make textfield empty
+  search_text.setText("");
   thread("textSubmit");
 }
 
@@ -153,7 +152,6 @@ void keyPressed() {
   if (search_text.isActive() && keyCode==ENTER) {
     // submit by pressing enter key
     keyword=search_text.getText();
-    search_text.setText("");
     thread("textSubmit");
   }
 }
@@ -168,7 +166,7 @@ void mouseClicked() {
       return;
     }
   }
-  if (total_num>0) { // only works if search result exists
+  if (total_num>0 && !criteria.isOpen()) { // only works if search result exists and dropdownlist is closed
     if (mouseHere(first_btn)) {
       // first page
       first_btn.click();

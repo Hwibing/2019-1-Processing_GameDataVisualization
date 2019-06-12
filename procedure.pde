@@ -27,7 +27,7 @@ void getDataFromAPI() {
 
   // connects to the API, which is XML file format
   String APIlink="http://www.grac.or.kr/WebService/GameSearchSvc.asmx/game?"
-    + "gametitle=" + game_title + "&entname=" + ent_name + "&rateno=" + rate_no + "&display=10&pageno=1";
+    + "gametitle=" + game_title + "&entname=" + ent_name + "&rateno=" + rate_no + "&display=1&pageno=1";
   if (!isThisLinkOK(APIlink)) {
     stopThread(-3);
     return;
@@ -78,9 +78,10 @@ void getDataFromAPI() {
       search_result=resXML;
     }
   }
-  
+
   isAnalyzing=true;
   analyzeData(); // make structure to handle easily
+  getStatistic();
   listUpdate(); // update list(page 0)
   isLoading=false; // done data loading
   isAnalyzing=false;
@@ -131,7 +132,7 @@ void showGames() {
   textFont(fontL);
   textAlign(LEFT, TOP);
   fill(0);
-  text("There are total of "+total_num+" search results.", 60, 160);
+  text("There are "+total_num+" search results for \""+keyword+"\".", 60, 160);
   text("(page "+(page+1)+"/"+(max_page+1)+")", 60, 190);
 
   // page buttons
@@ -166,6 +167,9 @@ void showGames() {
   catch(NullPointerException e) {
     // None
   }
+
+  // statistics
+  showStatistic();
 }
 
 void stopThread(int error_num) {

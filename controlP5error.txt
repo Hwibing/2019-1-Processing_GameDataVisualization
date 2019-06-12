@@ -1,0 +1,14 @@
+ControlP5 2.2.6 infos, comments, questions at http://www.sojamo.de/libraries/controlP5
+java.lang.ArrayIndexOutOfBoundsException: 61449
+	at controlP5.ControlWindow.keyEvent(Unknown Source)
+	at sun.reflect.GeneratedMethodAccessor6.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at processing.core.PApplet$RegisteredMethods.handle(PApplet.java:1432)
+	at processing.core.PApplet.handleMethods(PApplet.java:1634)
+	at processing.core.PApplet.handleKeyEvent(PApplet.java:3014)
+	at processing.core.PApplet.dequeueEvents(PApplet.java:2648)
+	at processing.core.PApplet.handleDraw(PApplet.java:2486)
+	at processing.awt.PSurfaceAWT$12.callDraw(PSurfaceAWT.java:1547)
+	at processing.core.PSurfaceNone$AnimationThread.run(PSurfaceNone.java:313)
+ArrayIndexOutOfBoundsException: 61449

@@ -9,7 +9,7 @@ Textfield search_text; // typing area
 String keyword;
 
 PFont fontB, fontR, fontRbig, fontL; // fonts
-boolean isLoading=false; // for the "Loading" statement on the screen
+boolean isLoading=false, isAnalyzing=false; // for the state sentence on the screen
 
 void setup() {
   size(1600, 900); // window size
@@ -33,7 +33,7 @@ void draw() {
 }
 
 void textSubmit() {
-  total_num=-1; // not searched yet
+  total_num=0; // not searched yet
   last_game=null; // reset
   search_text.setText(keyword); // recovery
   name_sort.setText("게임명순");
@@ -74,15 +74,21 @@ void decorate() {
   textAlign(CENTER, CENTER);
   if (isLoading) {
     // loading page
-    if (total_num>0) {
-      if (total_num<=150) {
-        // small data set
-        text("Loading...\n"+"(total "+total_num+" results)", width/2, height/2);
+    if (!isAnalyzing) {
+      if (total_num>0) {
+        if (total_num<=150) {
+          // small data set
+          text("Loading...\n"+"(total "+total_num+" results)", width/2, height/2);
+        } else {
+          // big data set
+          text("Loading...\n"+"(total "+(loading_cnt*150<total_num ? loading_cnt*150:total_num)+"/"+total_num+" results)", width/2, height/2);
+        }
       } else {
-        // big data set
-        text("Loading...\n"+"(total "+(loading_cnt*150<total_num ? loading_cnt*150:total_num)+"/"+total_num+" results)", width/2, height/2);
+        text("Loading...\n", width/2, height/2);
       }
-    } else text("Loading...\n", width/2, height/2);
+    } else {
+      text("Analyzing...\n", width/2, height/2);
+    }
   } else {
     // loading complete - result page
     switch(total_num) {

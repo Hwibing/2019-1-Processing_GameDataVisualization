@@ -78,8 +78,12 @@ void getDataFromAPI() {
       search_result=resXML;
     }
   }
+  
+  isAnalyzing=true;
   analyzeData(); // make structure to handle easily
+  listUpdate(); // update list(page 0)
   isLoading=false; // done data loading
+  isAnalyzing=false;
 }
 
 void analyzeData() {
@@ -100,7 +104,6 @@ void analyzeData() {
   page=0; // page initialize
   max_page=(total_num-1)/10;
   games=temp_games;
-  listUpdate();
 }
 
 void listUpdate() {

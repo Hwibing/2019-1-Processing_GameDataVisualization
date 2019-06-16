@@ -1,3 +1,6 @@
+color age_color[]={#FF0000, #FFA500, #FFFF00, #32CD32, #2E8B57, #40E0D0, #00008B, #800080};
+boolean is_showing_age=true;
+
 void showMainDisplay() {
   // segregation line
   stroke(0); 
@@ -47,6 +50,7 @@ void showMainDisplay() {
       break;
     default:
       showGames(); // game lists
+      showStatistic(); // statistics
     }
   }
 }
@@ -81,25 +85,54 @@ void showGames() {
   }
 
   // last clicked game info
+  textFont(fontLsmall);
+  fill(64);
+  noStroke();
+  rect(920, 670, 620, 175);
+  fill(255);
+  textAlign(LEFT, TOP);
   try {
-    fill(64);
-    noStroke();
-    rect(920, 670, 620, 175);
-    fill(255);
-    textAlign(LEFT, TOP);
     text(last_game.toString(), 920, 670, 620, 175);
   }
   catch(NullPointerException e) {
     // None
   }
-
-  // statistics
-  showStatistic();
 }
 
 void showStatistic() {
+  // box
   noFill();
   stroke(0);
   rect(920, 160, 620, 478);
-  line(920, 399, 1540, 399);
+  //line(920, 399, 1540, 399);
+
+  if (is_showing_age) {
+    // pie chart - age
+    float lastAngle=-HALF_PI;
+    int colorCnt=0;
+    color mouseColor;
+    
+    // drawing pie chart
+    for (String i : age_sort_result) {
+      stroke(0);
+      fill(age_color[colorCnt]);
+      arc(1230, 399, 450, 450, lastAngle, lastAngle+(float)age.get(i)/total_num*TWO_PI); // drawing sector
+      lastAngle+=(float)age.get(i)/total_num*TWO_PI;
+      colorCnt+=1; // changing color
+    }
+    mouseColor=get(mouseX, mouseY); // get the color of mouse-located pixel
+    for (int i=0; i<8; i+=1) {
+      if (mouseColor==age_color[i]) {
+        // mouse is here
+        fill(255);
+        stroke(0);
+        rect(mouseX, mouseY-50, 125, 50); // textbox
+        textFont(fontLsmall);
+        fill(0);
+        text(" "+age_sort_result.get(i)+"\n "+((float)age.get(age_sort_result.get(i))/total_num*100)+"%",mouseX,mouseY-50,125,50); // text (age and percentage)
+      }
+    }
+  } else {
+    // line chart - year
+  }
 }

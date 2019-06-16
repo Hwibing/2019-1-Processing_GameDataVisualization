@@ -23,7 +23,7 @@ abstract class clickButton {
     if (mouseHere(this)) {
       // mouse is over the button
       stroke(0);
-      fill(#0088FF);
+      fill(#0080FF);
     } else {
       noStroke();
       fill(gray_color);

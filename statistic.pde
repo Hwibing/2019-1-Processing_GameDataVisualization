@@ -8,7 +8,7 @@ ArrayList<String> age_sort_result=new ArrayList<String>();
 ArrayList<String> year_sort_result=new ArrayList<String>();
 
 void getStatistic() {
-  // counts the appropriate data andprovide statistics.
+  // counts the appropriate data and provide statistics.
   age.clear();
   for (game G : games) {
     // Getting age data

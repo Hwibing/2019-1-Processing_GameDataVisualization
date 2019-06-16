@@ -25,6 +25,9 @@ void setup() {
   // sort buttons
   name_sort=(sortButton)new sortButton(655, 195, 100, 30).setSort(elements[0]).setText("게임명순");
   date_sort=(sortButton)new sortButton(760, 195, 100, 30).setSort(elements[6]).setText("날짜순");
+
+  // graph button
+  graphBtn=(graphToggleButton)new graphToggleButton(1440, 608, 100, 30).setText("Toggle");
 }
 
 void draw() {
@@ -44,9 +47,9 @@ void textSubmit() {
     // Did not choose the criteria
     showMessageDialog(null, "Select the criteria.", "Alert", ERROR_MESSAGE);
     return;
-  } else if (keyword.length()<3) {
+  } else if (keyword.length()<=1) {
     // Text is too short
-    showMessageDialog(null, "Type more than 2 letters.", "Alert", ERROR_MESSAGE);
+    showMessageDialog(null, "Type more than 1 letters.", "Alert", ERROR_MESSAGE);
     return;
   } else {
     // normal case
@@ -63,7 +66,7 @@ void cp5Set() {
   fontL=createFont("NanumSquareRoundL.ttf", 24);
   fontRbig=createFont("NanumSquareRoundR.ttf", 45);
   fontLsmall=createFont("NanumSquareRoundL.ttf", 18);
-  
+
   // search buttonimages
   PImage search_button_images[]={loadImage("button1.png"), loadImage("button2.png"), loadImage("button3.png")};
   for (PImage i : search_button_images) i.resize(45, 45);
@@ -137,6 +140,8 @@ void mouseClicked() {
       name_sort.setText("게임명순");
       date_sort.setText("날짜순");
       date_sort.click();
+    } else if (mouseHere(graphBtn)) {
+      graphBtn.click();
     }
   }
 }

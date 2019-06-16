@@ -1,5 +1,5 @@
-color age_color[]={#FF0000, #FFA500, #FFFF00, #32CD32, #2E8B57, #40E0D0, #00008B, #800080};
-boolean is_showing_age=true;
+color age_color[]={#E6194B, #F58231, #FFE119, #3CB44B, #46F0F0, #4363D8, #911EB4, #F032E6};
+boolean isShowingAge=true;
 
 void showMainDisplay() {
   // segregation line
@@ -104,14 +104,13 @@ void showStatistic() {
   noFill();
   stroke(0);
   rect(920, 160, 620, 478);
-  //line(920, 399, 1540, 399);
 
-  if (is_showing_age) {
+  if (isShowingAge) {
     // pie chart - age
     float lastAngle=-HALF_PI;
     int colorCnt=0;
     color mouseColor;
-    
+
     // drawing pie chart
     for (String i : age_sort_result) {
       stroke(0);
@@ -129,10 +128,11 @@ void showStatistic() {
         rect(mouseX, mouseY-50, 125, 50); // textbox
         textFont(fontLsmall);
         fill(0);
-        text(" "+age_sort_result.get(i)+"\n "+((float)age.get(age_sort_result.get(i))/total_num*100)+"%",mouseX,mouseY-50,125,50); // text (age and percentage)
+        text(" "+age_sort_result.get(i)+"\n "+((float)age.get(age_sort_result.get(i))/total_num*100)+"%", mouseX, mouseY-50, 125, 50); // text (age and percentage)
       }
     }
   } else {
-    // line chart - year
+    // bar chart - year
   }
+  graphBtn.locate();
 }

@@ -1,6 +1,7 @@
 pageButton first_btn, prev_btn, post_btn, last_btn; // page changing numbers
 sortButton name_sort, date_sort; // two kinds of sort button
 gameRow[] list = new gameRow[10]; // gamerow array
+graphToggleButton graphBtn;
 
 abstract class clickButton {
   int x, y; // location
@@ -55,6 +56,8 @@ abstract class clickButton {
     y=ty;
     w=tw;
     h=th;
+    this.setColor(64);
+    this.setTextColor(255);
   }
 
   clickButton(int tx, int ty, int ts) {
@@ -63,6 +66,8 @@ abstract class clickButton {
     y=ty;
     w=ts;
     h=ts;
+    this.setColor(64);
+    this.setTextColor(255);
   }
 }
 
@@ -73,8 +78,6 @@ class pageButton extends clickButton {
 
   pageButton(int tx, int ty, int ts) {
     super(tx, ty, ts);
-    this.setColor(64);
-    this.setTextColor(255);
   }
 
   @Override
@@ -115,7 +118,7 @@ class gameRow extends clickButton {
     // rectangle
     super(tx, ty, tw, th);
     game_info=G;
-    this.setColor(64);
+    setTextColor(0);
   }
 
   @Override
@@ -142,8 +145,6 @@ class sortButton extends clickButton {
 
   sortButton(int tx, int ty, int tw, int th) {
     super(tx, ty, tw, th);
-    this.setColor(64);
-    this.setTextColor(255);
   }
 
   sortButton setSort(String bar) {
@@ -168,6 +169,18 @@ class sortButton extends clickButton {
       this.setText(this.label+" ▼");
     }
     sortAgain();
+  }
+}
+
+class graphToggleButton extends clickButton {
+  graphToggleButton(int tx, int ty, int tw, int th) {
+    super(tx, ty, tw, th);
+  }
+
+  @Override
+    void click() {
+    // graph toggled
+    isShowingAge=!isShowingAge;
   }
 }
 

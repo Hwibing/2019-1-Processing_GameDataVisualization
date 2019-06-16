@@ -137,7 +137,7 @@ boolean isThisLinkOK(String test_url) {
     URLConnection connection = url.openConnection();
     input = connection.getInputStream();
     return true;
-  } 
+  }
   catch (Exception e) {
     return false;
   }

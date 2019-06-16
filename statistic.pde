@@ -1,4 +1,3 @@
-// TODO: showStatistic
 import java.util.Iterator;
 import java.util.Comparator;
 

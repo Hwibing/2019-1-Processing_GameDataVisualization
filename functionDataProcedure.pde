@@ -34,6 +34,7 @@ void getDataFromAPI() {
   }
 
   // get all data
+  if (!isLoading) return; // thread killed
   search_result=loadXML(APIlink);
   // checking the errors of keyword
   if (search_result.getName()=="error") {
@@ -41,8 +42,9 @@ void getDataFromAPI() {
     return;
   }
 
-  total_num=search_result.getChild("tcount").getIntContent(); // get total results number
   // getting all data
+  total_num=search_result.getChild("tcount").getIntContent(); // get total results number
+  if (!isLoading) return; // thread killed
   if (total_num>0) {
     if (total_num<=150) {
       // small data set
@@ -63,12 +65,13 @@ void getDataFromAPI() {
         loading_cnt+=1;
         APIlink="http://www.grac.or.kr/WebService/GameSearchSvc.asmx/game?"
           + "gametitle=" + game_title + "&entname=" + ent_name + "&rateno=" + rate_no + "&display=150&pageno="+loading_cnt;
+        if (!isLoading) return; // thread killed
         if (!isThisLinkOK(APIlink)) {
           stopThread(-3);
           return;
         }
 
-        // get and move 
+        // get and move
         tempXML=loadXML(APIlink);
         XML items[]=tempXML.getChildren("item");
         for (XML i : items) {
@@ -79,21 +82,31 @@ void getDataFromAPI() {
     }
   }
 
-  isAnalyzing=true;
-  analyzeData(); // make structure to handle easily
-  getStatistic();
-  listUpdate(); // update list(page 0)
-  isLoading=false; // done data loading
-  isAnalyzing=false;
+  if (!(!isLoading || total_num<=0)) {
+    // data analyze
+    isAnalyzing=true;
+    analyzeData(); // make structure to handle easily
+    listUpdate(); // update list(page 0)
+
+    if (!isLoading) return; // thread killed
+    getStatistic();
+
+    // done
+    isLoading=false; // done data loading
+    isAnalyzing=false;
+  }
 }
 
 void analyzeData() {
+  if (!isAnalyzing) return; // thread killed
+
   // analyze the XML file about games
   // it is guaranteed that total_num>0
   ArrayList<game> temp_games=new ArrayList();
 
   XML[] items=search_result.getChildren("item");
   for (XML i : items) { // for each items(games)
+    if (!isAnalyzing) return; // thread killed
     String[] content = new String[7];
     for (int j=0; j<7; j+=1) {
       content[j]=i.getChild(elements[j]).getContent("NIL").trim(); // get attributes
@@ -120,6 +133,7 @@ void listUpdate() {
 }
 
 void sortAgain() {
+  if (total_num<=0) return;
   // resetting some variables
   page=0; // page initialize
   Collections.sort(games);

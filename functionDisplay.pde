@@ -1,4 +1,4 @@
-color age_color[]={#E6194B, #F58231, #FFE119, #3CB44B, #46F0F0, #4363D8, #911EB4, #F032E6};
+color color_list[]={#E6194B, #F58231, #FFE119, #3CB44B, #46F0F0, #4363D8, #911EB4, #F032E6};
 boolean isShowingAge=true;
 
 void showMainDisplay() {
@@ -18,20 +18,23 @@ void showMainDisplay() {
   textAlign(CENTER, CENTER);
   if (isLoading) {
     // loading page
+    brkBtn.locate();
+    textFont(fontRbig);
+    fill(0);
     if (!isAnalyzing) {
       if (total_num>0) {
         if (total_num<=150) {
           // small data set
-          text("Loading...\n"+"(total "+total_num+" results)", width/2, height/2);
+          text("Loading\n"+"(total "+total_num+" results)", width/2, height/2);
         } else {
           // big data set
-          text("Loading...\n"+"(total "+(loading_cnt*150<total_num ? loading_cnt*150:total_num)+"/"+total_num+" results)", width/2, height/2);
+          text("Loading\n"+"(total "+(loading_cnt*150<total_num ? loading_cnt*150:total_num)+"/"+total_num+" results)", width/2, height/2);
         }
       } else {
-        text("Loading...\n", width/2, height/2);
+        text("Loading\n", width/2, height/2);
       }
     } else {
-      text("Analyzing...\n", width/2, height/2);
+      text("Analyzing\n", width/2, height/2);
     }
   } else {
     // loading complete - result page
@@ -49,6 +52,12 @@ void showMainDisplay() {
       text("No such game.", width/2, height/2);
       break;
     default:
+      if (breaked) {
+        // catching break error
+        isLoading=isAnalyzing=breaked=false;
+        total_num=-1;
+        return;
+      }
       showGames(); // game lists
       showStatistic(); // statistics
     }
@@ -103,7 +112,11 @@ void showStatistic() {
   // box
   noFill();
   stroke(0);
-  rect(920, 160, 620, 478);
+  rect(920, 160, 620, 478); // border
+  textAlign(LEFT, BOTTOM);
+  textFont(fontLsmall);
+  fill(0);
+  text("Now showing: "+(isShowingAge ? "Age":"Year")+" data", 920, 638);
 
   if (isShowingAge) {
     // pie chart - age
@@ -114,25 +127,59 @@ void showStatistic() {
     // drawing pie chart
     for (String i : age_sort_result) {
       stroke(0);
-      fill(age_color[colorCnt]);
+      fill(color_list[colorCnt]);
       arc(1230, 399, 450, 450, lastAngle, lastAngle+(float)age.get(i)/total_num*TWO_PI); // drawing sector
       lastAngle+=(float)age.get(i)/total_num*TWO_PI;
       colorCnt+=1; // changing color
     }
+
+    // textbox
     mouseColor=get(mouseX, mouseY); // get the color of mouse-located pixel
     for (int i=0; i<8; i+=1) {
-      if (mouseColor==age_color[i]) {
+      if (mouseColor==color_list[i]) {
         // mouse is here
         fill(255);
         stroke(0);
-        rect(mouseX, mouseY-50, 125, 50); // textbox
+        rect(mouseX, mouseY-50, 125, 50);
         textFont(fontLsmall);
         fill(0);
         text(" "+age_sort_result.get(i)+"\n "+((float)age.get(age_sort_result.get(i))/total_num*100)+"%", mouseX, mouseY-50, 125, 50); // text (age and percentage)
       }
     }
   } else {
-    // bar chart - year
+    // histogram and line graph - year
+    // pillar
+    float pillar_height=0;
+    int max_year_value=max(year_arrange_result);
+    for (int i=0; i<10; i+=1) {
+      fill(0);
+      stroke(255);
+      pillar_height=map(year_arrange_result[i], 0, max_year_value, 575, 195); // calculating pillar height
+      rect(945+57*i, pillar_height, 57, 575-pillar_height);
+    }
+
+    // axis
+    stroke(0);
+    for (int i=0; i<=10; i+=1) {
+      fill(0);
+      textAlign(CENTER, TOP);
+      textFont(fontLsmall);
+      text(str(int(minYear+i*year_gap)), 945+57*i, 575);
+    }
+    line(940, 575, 1520, 575);
+
+    // textBox
+    for (int i=0; i<10; i+=1) {
+      pillar_height=map(year_arrange_result[i], 0, max_year_value, 575, 195);
+      if (mouseHere(945+57*i, (int)pillar_height, 57, 575-(int)pillar_height)) {
+        fill(255);
+        stroke(0);
+        rect(mouseX, mouseY-50, 125, 50);
+        textFont(fontLsmall);
+        fill(0);
+        text("", mouseX, mouseY-50, 125, 50); // text (age and percentage)        
+      }
+    }
   }
   graphBtn.locate();
 }

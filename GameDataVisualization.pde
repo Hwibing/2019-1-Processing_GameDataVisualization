@@ -9,7 +9,7 @@ Textfield search_text; // typing area
 String keyword="";
 
 PFont fontB, fontR, fontRbig, fontL, fontLsmall; // fonts
-boolean isLoading=false, isAnalyzing=false; // for the state sentence on the screen
+boolean isLoading=false, isAnalyzing=false, breaked=false; // for the state sentence on the screen
 
 void setup() {
   size(1600, 900); // window size
@@ -28,6 +28,9 @@ void setup() {
 
   // graph button
   graphBtn=(graphToggleButton)new graphToggleButton(1440, 608, 100, 30).setText("Toggle");
+
+  // break button
+  brkBtn=(breakButton)new breakButton(750, 350, 100, 30).setText("Break");
 }
 
 void draw() {
@@ -38,6 +41,7 @@ void draw() {
 void textSubmit() {
   total_num=0; // not searched yet
   last_game=null; // reset
+  breaked=false;
   name_sort.setText("게임명순");
   date_sort.setText("날짜순 ▼");
 
@@ -108,7 +112,12 @@ void keyPressed() {
 }
 
 void mouseClicked() {
-  if (isLoading) return;
+  if (isLoading) {
+    if (mouseHere(brkBtn)) {
+      brkBtn.click();
+    }
+    return;
+  }
   for (gameRow i : list) {
     if (i==null) break;
     if (mouseHere(i)) {
@@ -117,7 +126,7 @@ void mouseClicked() {
       return;
     }
   }
-  if (total_num>0 && !criteria.isOpen()) { // only works if search result exists and dropdownlist is closed
+  if (total_num>0 && !criteria.isOpen() && !breaked) { // only works if search result exists and dropdownlist is closed, catched break error
     if (mouseHere(first_btn)) {
       // first page
       first_btn.click();

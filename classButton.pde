@@ -2,12 +2,14 @@ pageButton first_btn, prev_btn, post_btn, last_btn; // page changing numbers
 sortButton name_sort, date_sort; // two kinds of sort button
 gameRow[] list = new gameRow[10]; // gamerow array
 graphToggleButton graphBtn;
+breakButton brkBtn;
+
 
 abstract class clickButton {
   int x, y; // location
   int w, h; // width and height of the box
   int gray_color=128; // gray color value for box color
-  int text_color=0; // text color
+  int text_color; // text color
   String label=""; // button text
 
   void locate() {
@@ -181,6 +183,35 @@ class graphToggleButton extends clickButton {
     void click() {
     // graph toggled
     isShowingAge=!isShowingAge;
+  }
+}
+
+class breakButton extends clickButton {
+  breakButton(int tx, int ty, int tw, int th) {
+    super(tx, ty, tw, th);
+    text_color=0;
+    gray_color=255;
+  }
+
+  @Override
+    void fillAndStroke() {
+    // set button color and stroke (not text)
+    if (mouseHere(this)) {
+      // mouse is over the button
+      noStroke();
+      fill(#0080FF);
+    } else {
+      stroke(0);
+      fill(gray_color);
+    }
+  }
+
+  @Override
+    void click() {
+    total_num=-1;
+    isLoading=false;
+    isAnalyzing=false;
+    breaked=true;
   }
 }
 

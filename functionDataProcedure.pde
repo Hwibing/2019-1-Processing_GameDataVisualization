@@ -33,7 +33,7 @@ void getDataFromAPI() {
     return;
   }
 
-  // get all data
+  // error check
   if (!isLoading) return; // thread killed
   search_result=loadXML(APIlink);
   // checking the errors of keyword
@@ -62,7 +62,7 @@ void getDataFromAPI() {
       XML tempXML; // temp result for getting the data of each page
 
       if (total_num<=1500) loading_gap=150;
-      else loading_gap=total_num/10;
+      else loading_gap=int(sqrt(total_num)*5);
       while (loading_cnt*loading_gap<total_num) {
         loading_cnt+=1;
         APIlink="http://www.grac.or.kr/WebService/GameSearchSvc.asmx/game?"
@@ -92,11 +92,11 @@ void getDataFromAPI() {
 
     if (!isLoading) return; // thread killed
     getStatistic();
-
-    // done
-    isLoading=false; // done data loading
-    isAnalyzing=false;
   }
+
+  // done
+  isLoading=false; // done data loading
+  isAnalyzing=false;
 }
 
 void analyzeData() {

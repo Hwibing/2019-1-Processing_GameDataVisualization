@@ -57,14 +57,16 @@ void getDataFromAPI() {
       search_result=loadXML(APIlink); // get all at once
     } else {
       // too large data set, so divide the whole data set
-      loading_cnt=0; 
+      loading_cnt=0;
       XML resXML=new XML("result"); // result xml; be going to be search_result
       XML tempXML; // temp result for getting the data of each page
 
-      while (loading_cnt*150<total_num) {
+      if (total_num<=1500) loading_gap=150;
+      else loading_gap=total_num/10;
+      while (loading_cnt*loading_gap<total_num) {
         loading_cnt+=1;
         APIlink="http://www.grac.or.kr/WebService/GameSearchSvc.asmx/game?"
-          + "gametitle=" + game_title + "&entname=" + ent_name + "&rateno=" + rate_no + "&display=150&pageno="+loading_cnt;
+          + "gametitle=" + game_title + "&entname=" + ent_name + "&rateno=" + rate_no + "&display="+loading_gap+"&pageno="+loading_cnt;
         if (!isLoading) return; // thread killed
         if (!isThisLinkOK(APIlink)) {
           stopThread(-3);

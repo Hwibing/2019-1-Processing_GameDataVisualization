@@ -28,7 +28,10 @@ void showMainDisplay() {
           text("Loading\n"+"(total "+total_num+" results)", width/2, height/2);
         } else {
           // big data set
-          text("Loading\n"+"(total "+(loading_cnt*150<total_num ? loading_cnt*150:total_num)+"/"+total_num+" results)", width/2, height/2);
+          text("Loading\n"+"(total "+(loading_cnt*loading_gap<total_num ? loading_cnt*loading_gap:total_num)+"/"+total_num+" results)", width/2, height/2);
+          textAlign(LEFT, TOP);
+          textFont(fontRmini);
+          text("3000개 이상의 결과는 서버의 오류를 초래할 수 있습니다.", 20, 125);
         }
       } else {
         text("Loading\n", width/2, height/2);

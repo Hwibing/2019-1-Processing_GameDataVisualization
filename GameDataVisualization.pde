@@ -10,6 +10,7 @@ String keyword="";
 
 PFont fontB, fontR, fontRbig, fontRmini, fontL, fontLsmall; // fonts
 boolean isLoading=false, isAnalyzing=false, breaked=false; // for the state sentence on the screen
+int loading_gap=0;
 
 void setup() {
   size(1600, 900); // window size
@@ -51,9 +52,9 @@ void textSubmit() {
     // Did not choose the criteria
     showMessageDialog(null, "Select the criteria.", "Alert", ERROR_MESSAGE);
     return;
-  } else if (keyword.length()<=1) {
+  } else if (keyword.length()<=2) {
     // Text is too short
-    showMessageDialog(null, "Type more than 1 letters.", "Alert", ERROR_MESSAGE);
+    showMessageDialog(null, "Type more than 2 letters.", "Alert", ERROR_MESSAGE);
     return;
   } else {
     // normal case

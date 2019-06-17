@@ -54,6 +54,7 @@ void showMainDisplay() {
     default:
       if (breaked) {
         // catching break error
+        println("catched break error");
         isLoading=isAnalyzing=breaked=false;
         total_num=-1;
         return;
@@ -149,35 +150,57 @@ void showStatistic() {
   } else {
     // histogram and line graph - year
     // pillar
+    textFont(fontRmini);
+    textAlign(LEFT, TOP);
+    text("데이터가 적으면 제대로 표시되지 않을 수 있습니다.", 920, 160);
     float pillar_height=0;
     int max_year_value=max(year_arrange_result);
     for (int i=0; i<10; i+=1) {
-      fill(0);
+      fill(#6699CC);
       stroke(255);
       pillar_height=map(year_arrange_result[i], 0, max_year_value, 575, 195); // calculating pillar height
-      rect(945+57*i, pillar_height, 57, 575-pillar_height);
+      rect(1008.6+44.3*i, pillar_height, 44.3, 575-pillar_height);
     }
+
+    // line graph - point
+    for (int i=0; i<10; i+=1) {
+      pillar_height=map(year_arrange_result[i], 0, max_year_value, 575, 195);
+      fill(0);
+      noStroke();
+      ellipse(1008.6+44.3*i+22.2, pillar_height, 3, 3);
+    }
+
+    // line graph - line
+    for (int i=1; i<10; i+=1) {
+      float pillar_height1=map(year_arrange_result[i], 0, max_year_value, 575, 195);
+      float pillar_height2=map(year_arrange_result[i-1], 0, max_year_value, 575, 195);
+      stroke(0);
+      line(1008.6+44.3*i+22.2, pillar_height1, 1008.6+44.3*(i-1)+22.2, pillar_height2);
+    }
+    line(1030.8, map(year_arrange_result[0], 0, max_year_value, 575, 195), 986.4, 575);
+    line(1429.5, map(year_arrange_result[9], 0, max_year_value, 575, 195), 1473.8, 575);
 
     // axis
     stroke(0);
     for (int i=0; i<=10; i+=1) {
       fill(0);
       textAlign(CENTER, TOP);
-      textFont(fontLsmall);
-      text(str(int(minYear+i*year_gap)), 945+57*i, 575);
+      textFont(fontRmini);
+      text(str(int(minYear+i*year_gap)), 1008.6+44.3*i, 575);
+      line(1008.6+44.3*i, 573, 1008.6+44.3*i, 577); // gradation
     }
     line(940, 575, 1520, 575);
 
     // textBox
     for (int i=0; i<10; i+=1) {
       pillar_height=map(year_arrange_result[i], 0, max_year_value, 575, 195);
-      if (mouseHere(945+57*i, (int)pillar_height, 57, 575-(int)pillar_height)) {
+      if (mouseHere(1008.6+44.3*i, pillar_height, 44.3, 575-pillar_height)) {
         fill(255);
         stroke(0);
         rect(mouseX, mouseY-50, 125, 50);
         textFont(fontLsmall);
         fill(0);
-        text("", mouseX, mouseY-50, 125, 50); // text (age and percentage)        
+        text(str(int(minYear+i*year_gap))+"~"+str(int(minYear+(i+1)*year_gap))+"\n"+str(year_arrange_result[i]), mouseX, mouseY-50, 125, 50);
       }
     }
   }

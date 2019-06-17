@@ -8,7 +8,7 @@ String[] criterias={"게임명", "배급사명", "분류번호"}; // criteria li
 Textfield search_text; // typing area
 String keyword="";
 
-PFont fontB, fontR, fontRbig, fontL, fontLsmall; // fonts
+PFont fontB, fontR, fontRbig, fontRmini, fontL, fontLsmall; // fonts
 boolean isLoading=false, isAnalyzing=false, breaked=false; // for the state sentence on the screen
 
 void setup() {
@@ -69,6 +69,7 @@ void cp5Set() {
   fontR=createFont("NanumSquareRoundR.ttf", 20);
   fontL=createFont("NanumSquareRoundL.ttf", 24);
   fontRbig=createFont("NanumSquareRoundR.ttf", 45);
+  fontRmini=createFont("NanumSquareRoundR.ttf", 12);
   fontLsmall=createFont("NanumSquareRoundL.ttf", 18);
 
   // search buttonimages
@@ -155,7 +156,7 @@ void mouseClicked() {
   }
 }
 
-boolean mouseHere(int x, int y, int w, int h) {
+boolean mouseHere(float x, float y, float w, float h) {
   // rectangle range
   return x<=mouseX && y<=mouseY && mouseX<=x+w && mouseY<=y+h;
 }
